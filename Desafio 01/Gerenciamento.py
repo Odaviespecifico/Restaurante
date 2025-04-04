@@ -26,6 +26,7 @@ class estoque:
             else:
                 print('-'*10)
     def cadastrar():
+        
         print("Cadastrar produto")
         cod = input("Digite o código do produto: ")
         nome = input("Digite o nome do produto: ") 
@@ -33,11 +34,13 @@ class estoque:
         unidade = input("Digite a unidade de medida do produto: ")
         preço = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
-        with open(r"Desafio 01\estoque.csv","a",encoding="UTF-8") as estoque:
-            escrever = csv.writer(estoque,delimiter=";",quoting=csv.QUOTE_MINIMAL)
-            escrever.writerow(['\n',cod,nome,quantidade,unidade,preço,validade])
-        print("Produto cadastrado com sucesso!")
-
+        with open(r"Desafio 01\estoque.csv","a",encoding="UTF-8",newline="") as estoque:
+            escrever = csv.writer(estoque,delimiter=";")
+            # escrever.writerow([cod,nome,quantidade,unidade,preço,validade])
+            # escrever.writerow('')
+            #estoque.write('\n')
+            escrever.writerow([cod,nome,quantidade,unidade,preço,validade])
+    
 
 
 #print(estoque.consultar())
