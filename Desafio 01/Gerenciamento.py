@@ -34,11 +34,11 @@ class estoque:
         preço = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
         with open(r"Desafio 01\estoque.csv","a",encoding="UTF-8") as estoque:
-            escrever = csv.writer(estoque,delimiter=";")
-            escrever.writerow([cod,nome,quantidade,unidade,preço,validade])
+            escrever = csv.writer(estoque,delimiter=";",quoting=csv.QUOTE_MINIMAL)
+            escrever.writerow(['\n',cod,nome,quantidade,unidade,preço,validade])
         print("Produto cadastrado com sucesso!")
 
 
 
-print(estoque.consultar())
-#estoque.cadastrar()
+#print(estoque.consultar())
+estoque.cadastrar()
