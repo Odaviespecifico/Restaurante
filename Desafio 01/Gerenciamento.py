@@ -1,6 +1,6 @@
 import csv
 import datetime
-
+itens_estoque = []
 class estoque:
     def __init__(self):
         self.estoque = "estoque.csv"
@@ -23,8 +23,10 @@ class estoque:
                 print(f'Quantidade:{quantidade}{unidade}')
                 print(f'preço: R${preço}')
                 print(f'Validade:{validade}')
+                itens_estoque.append(linha)
             else:
                 print('-'*10)
+                print(itens_estoque)
     def cadastrar():
         
         print("Cadastrar produto")
@@ -43,5 +45,5 @@ class estoque:
     
 
 
-#print(estoque.consultar())
-estoque.cadastrar()
+print(estoque.consultar())
+#estoque.cadastrar()
