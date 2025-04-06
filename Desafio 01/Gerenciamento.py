@@ -44,6 +44,3 @@ class estoque:
             escrever.writerow([cod,nome,quantidade,unidade,preço,validade])
     
 
-
-print(estoque.consultar())
-#estoque.cadastrar()
