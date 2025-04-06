@@ -1,7 +1,8 @@
-from Gerenciamento import estoque
+from Gerenciamento import estoque,cardapio
 from Uteis import *
 
 e = estoque()
+c = cardapio()
 print_ornamentado('Gerenciamento de restaurantes')
 while True:
     print(opções_geral)
@@ -24,11 +25,17 @@ while True:
                     case '5':
                         break
                     case _:
-                        print(f"{cores['vermelho']}Opção inválida{cores['branco']}")
+                        print(f'{vermelho}Opção inválida{branco}')
                         continue
             print_ornamentado("Menu principal")
         case '2':
-            pass
+            print_ornamentado('Estoque')
+            while True:
+                print(opções_cardapio)
+                op = input("Digite a opção desejada: ")
+                match op:
+                    case '1':
+                        e.consultar()
         case '3':
             pass
         case '4':
@@ -36,5 +43,5 @@ while True:
         case '5':
             break
         case _:
-            print(f"{cores['vermelho']}Opção inválida{cores['branco']}")
+            print(f"{vermelho}Opção inválida{branco}")
             continue

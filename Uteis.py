@@ -1,22 +1,25 @@
 from datetime import date
-cores = {'azul': '\033[34m', 'vermelho': '\033[31m', 'verde': '\033[32m', 'amarelo': '\033[33m', 'rosa': '\033[35m', 'branco': '\033[37m'}
-azul = cores['azul']
-vermelho = cores['vermelho']
-verde = cores['verde']
-amarelo = cores['amarelo']
-branco = cores['branco']
-rosa = cores['rosa']
+import csv
+
+azul = '\033[34m'
+vermelho = '\033[31m'
+verde = '\033[32m'
+amarelo = '\033[33m'
+branco = '\033[37m'
+rosa = '\033[35m'
 
 
 def print_ornamentado(texto):
-    print(f"{cores['azul']}")
+    print(azul)
     print("="*len(texto))
     print(texto)
     print("="*len(texto))
-    print(f"{cores['branco']}")
+    print(branco)
 
 def validade_cor(validade):
-    ano,mes,dia = int(validade[6:]),int(validade[3:5]),int(validade[0:2])
+    ano,dia,mes = int(validade[6:]),int(validade[0:2]),int(validade[3:5])
+    # print(date(ano,mes,dia))
+    # print(date.today())
     diferença = (date(ano,mes,dia) - date.today()).days
     # print(diferença)
     if diferença >= 3:
@@ -48,6 +51,12 @@ def editou(item):
     mostrar_item(item)
     print(f'{verde}Produto alterado com sucesso!{branco}')
 
+def writedict(file,data):
+    with open("file","w",encoding="UTF-8",newline="") as estoque:
+        writer = csv.DictWriter(estoque, fieldnames=data[1].keys(), delimiter=';')
+        writer.writeheader()
+        writer.writerows(data)
+
 opções_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha
@@ -62,6 +71,12 @@ opções_estoque = """Opções:
 \033[35m4\033[37m - Remover produto
 \033[35m5\033[37m - voltar ao menu principal"""
 
-print_ornamentado('Gerenciamento de restaurantes')
-print_ornamentado('Sistema de gerenciamento de estoque')
-print_ornamentado('teste')
+opções_cardapio = """Opções:
+\033[35m1\033[37m - Consultar cardápio
+\033[35m2\033[37m - Cadastrar produto
+\033[35m3\033[37m - atualizar produto
+\033[35m4\033[37m - Remover produto
+\033[35m5\033[37m - voltar ao menu principal"""
+
+if __name__ == "__main__":
+    print(validade_cor('02/04/2025'))

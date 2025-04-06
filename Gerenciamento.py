@@ -1,22 +1,19 @@
 import datetime
 from Uteis import *
+import csv
 editar = False
 class estoque:
     def __init__(self):
-        with open("estoque.txt",encoding='UTF-8') as items:
-            self.content = eval(items.read())
-
+        with open('estoque.csv',encoding='UTF-8') as estoque:
+            self.content = []
+            for row in csv.DictReader(estoque,delimiter=';'):
+                self.content.append(row)
     def consultar(self):
         global editar
         if editar != True:
             print_ornamentado('Itens no estoque')
         for i in self.content:
-            print('-'*20)
-            print(f"{azul}Código do item:{branco} {i['Código']}")
-            print(f"{azul}Nome do item:{branco} {i['Nome']}")
-            print(f"{azul}Quantidade:{branco} {i['Quantidade']} {i['Unidade']}")
-            print(f"{azul}preço:{branco} R${i['Preço']}")
-            print(validade_cor(i['Validade']))
+            mostrar_item(i)
         else:
                 print('-'*20)
 
@@ -32,9 +29,8 @@ class estoque:
         self.content.append(item)
         mostrar_item(item)
         print(verde,'produto cadastrado com sucesso',branco)
-        with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
-            estoque.write(str(self.content))
-        
+        writedict("estoque.csv",self.content)
+
     def editar(self):
         global editar
         editar = True
@@ -84,8 +80,7 @@ class estoque:
             if posição > 0:
                 print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
-        with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
-            estoque.write(str(self.content))
+        writedict("estoque.csv",self.content)
         
     def remover(self):
         print_ornamentado('Remover produto')
@@ -109,12 +104,29 @@ class estoque:
         else:
             print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
-        with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
-            estoque.write(str(self.content))
-        editar = False
+        writedict("estoque.csv",self.content)
                         
-                        
+class cardapio:
+    def __init__(self):
+        with open("cardápio.csv",encoding='UTF-8') as items:
+            self.cardápio = csv.DictReader(items,delimiter=';')
+        with open('estoque.csv',encoding='UTF-8') as items:
+            self.estoque = csv.DictReader(items,delimiter=';')
+    def consultar(self):
+        print_ornamentado('Itens no cardápio')
+    
+    def cadastrar(self):
+        print_ornamentado('Cadastrar produto')
+        nome = input("Digite o nome do produto: ") 
+        preço = input("Digite o preço do produto: ")
+        descrição = input("Digite a descrição do produto: ")
+
+        e.consultar()
+        
+        with open("cardápio.txt","w",encoding="UTF-8") as cardápio:
+            cardápio.write(str(self.estoque))
 
 if __name__ == '__main__':
     e = estoque()
-    e.remover()
+    c = cardapio()
+    c.cadastrar()
