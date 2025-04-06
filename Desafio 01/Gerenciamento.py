@@ -1,34 +1,24 @@
-import csv
 import datetime
-itens_estoque = []
+from Uteis import *
+
 class estoque:
     def __init__(self):
-        self.estoque = "estoque.csv"
-        
-    def consultar():
-        with open(r"C:\Users\Davi\Documents\Progamação\Restaurante\Desafio 01\estoque.csv","r",encoding="UTF-8") as estoque:
-            leitor = csv.reader(estoque,delimiter=";") #lê as linhas do estoque
-            for linha in leitor:
-                # try:
-                #     linha[1]
-                #     continue
-                # except:
-                #     pass
-                #Código; nome; quantidade; unidade de medida; preço unitário; validade
-                #print(linha)
-                cod, nome, quantidade, unidade, preço, validade = linha[0],linha[1],linha[2],linha[3],linha[4],linha[5]
+        with open("Desafio 01\estoque.txt",encoding='UTF-8') as items:
+            self.content = eval(items.read())
+
+    def consultar(self):
+        print_ornamentado('Itens no estoque')
+        for i in self.content:
+            print('-'*10)
+            print(f"Código do item: {i['Código']}")
+            print(f"Nome do item: {i['Nome']}")
+            print(f"Quantidade: {i['Quantidade']}{i['Unidade']}")
+            print(f"preço: R${i['Preço']}")
+            print(f"Validade: {i['Validade']}")
+        else:
                 print('-'*10)
-                print(f'Código do item: {cod}')
-                print(f'Nome do item:{nome}')
-                print(f'Quantidade:{quantidade}{unidade}')
-                print(f'preço: R${preço}')
-                print(f'Validade:{validade}')
-                itens_estoque.append(linha)
-            else:
-                print('-'*10)
-                print(itens_estoque)
-    def cadastrar():
-        
+
+    def cadastrar(self):
         print("Cadastrar produto")
         cod = input("Digite o código do produto: ")
         nome = input("Digite o nome do produto: ") 
@@ -36,11 +26,12 @@ class estoque:
         unidade = input("Digite a unidade de medida do produto: ")
         preço = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
-        with open(r"Desafio 01\estoque.csv","a",encoding="UTF-8",newline="") as estoque:
-            escrever = csv.writer(estoque,delimiter=";")
-            # escrever.writerow([cod,nome,quantidade,unidade,preço,validade])
-            # escrever.writerow('')
-            #estoque.write('\n')
-            escrever.writerow([cod,nome,quantidade,unidade,preço,validade])
-    
+        item = {"codigo":cod,"nome":nome,"quantidade":quantidade,"unidade":unidade,"preço":preço,"validade":validade}
+        self.estoque_items.append(item)
+        with open("Desafio 01\estoque.txt","w",encoding="UTF-8",newline="") as estoque:
+            estoque.write(str(self.estoque_items))
 
+
+if __name__ == '__main__':
+    e = estoque()
+    e.consultar()
