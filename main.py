@@ -18,7 +18,7 @@ while True:
                     case '2':
                         e.cadastrar()
                     case '3':
-                        pass
+                        e.editar()
                     case '4':
                         pass
                     case '5':

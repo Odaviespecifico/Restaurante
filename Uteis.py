@@ -25,6 +25,28 @@ def validade_cor(validade):
     else:
         return f"{azul}Validade:{branco} {vermelho}{validade}{branco}"
 
+def mostrar_item(item,editar=False):
+    if not editar:
+        print('-'*20)
+        print(f"{azul}Código do item:{branco} {item['Código']}")
+        print(f"{azul}Nome do item:{branco} {item['Nome']}")
+        print(f"{azul}Quantidade:{branco} {item['Quantidade']} {item['Unidade']}")
+        print(f"{azul}preço:{branco} R${item['Preço']}")
+        print(validade_cor(item['Validade']))
+    else:
+        print('-'*20)
+        print(f"1 - {azul}Código do item:{branco} {item['Código']}")
+        print(f"2 - {azul}Nome do item:{branco} {item['Nome']}")
+        print(f"3 - {azul}Quantidade:{branco} {item['Quantidade']}")
+        print(f"4 - {azul}Quantidade:{branco} {item['Unidade']}")
+        print(f"5 - {azul}preço:{branco} R${item['Preço']}")
+        print(validade_cor(item['Validade']))
+
+def editou():
+    editar = False
+    mostrar_item(self.content[posição])
+    print(f'{verde}Produto alterado com sucesso!{branco}')
+
 opções_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha

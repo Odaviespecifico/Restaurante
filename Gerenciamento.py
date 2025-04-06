@@ -30,6 +30,8 @@ class estoque:
         validade = input("Digite a validade do produto: ")
         item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preço,"Validade":validade}
         self.content.append(item)
+        mostrar_item(item)
+        print(verde,'produto cadastrado com sucesso',branco)
         with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
             estoque.write(str(self.content))
         
@@ -43,40 +45,28 @@ class estoque:
         for i in self.content:
             # print(i)
             if i["Código"] == Escolha or i["Nome"] == Escolha:
-                print('-'*20)
-                print(f"1 - {azul}Código do item:{branco} {i['Código']}")
-                print(f"2 - {azul}Nome do item:{branco} {i['Nome']}")
-                print(f"3 - {azul}Quantidade:{branco} {i['Quantidade']}")
-                print(f"4 - {azul}Unidade:{branco} {i['Unidade']}")
-                print(f"5 - {azul}preço:{branco} R${i['Preço']}")
-                print("6 - ",validade_cor(i['Validade']))
+                mostrar_item(i,True)
                 while True:
                     escolha = input(f"{rosa}Qual parte você quer editar? {branco}")
                     match escolha:
                         case "1":
                             self.content[posição]['Código'] = input("Digite o novo código do produto: ")
-                            editar = False
-                            break
+                            editou()
                         case "2":
                             self.content[posição]['Nome'] = input("Digite o novo nome do produto: ")
-                            editar = False
-                            break
+                            editou()
                         case "3":
                             self.content[posição]['Quantidade'] = input("Digite a nova quantidade do produto: ")
-                            editar = False
-                            break
+                            editou()
                         case "4":
                             self.content[posição]['Unidade'] = input("Digite a nova unidade do produto: ")
-                            editar = False
-                            break
+                            editou()
                         case "5":
                             self.content[posição]['Preço'] = input("Digite o novo preço do produto: ")
-                            editar = False
-                            break
+                            editou()
                         case "5":
                             self.content[posição]['Validade'] = input("Digite a nova validade do produto: ")
-                            editar = False
-                            break
+                            editou()
                         case _:
                             print(f'{vermelho}Opção inválida{branco}')
                 break
@@ -89,7 +79,7 @@ class estoque:
 
         with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
             estoque.write(str(self.content))
-        self.consultar()
+        
             
                         
                         
