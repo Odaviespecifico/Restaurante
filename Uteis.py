@@ -38,13 +38,13 @@ def mostrar_item(item,editar=False):
         print(f"1 - {azul}Código do item:{branco} {item['Código']}")
         print(f"2 - {azul}Nome do item:{branco} {item['Nome']}")
         print(f"3 - {azul}Quantidade:{branco} {item['Quantidade']}")
-        print(f"4 - {azul}Quantidade:{branco} {item['Unidade']}")
+        print(f"4 - {azul}Unidade:{branco} {item['Unidade']}")
         print(f"5 - {azul}preço:{branco} R${item['Preço']}")
-        print(validade_cor(item['Validade']))
+        print("6 - ",validade_cor(item['Validade']))
 
-def editou():
+def editou(item):
     editar = False
-    mostrar_item(self.content[posição])
+    mostrar_item(item)
     print(f'{verde}Produto alterado com sucesso!{branco}')
 
 opções_geral = """Opções:

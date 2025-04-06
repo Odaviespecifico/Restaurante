@@ -51,22 +51,22 @@ class estoque:
                     match escolha:
                         case "1":
                             self.content[posição]['Código'] = input("Digite o novo código do produto: ")
-                            editou()
+                            editou(self.content[posição])
                         case "2":
                             self.content[posição]['Nome'] = input("Digite o novo nome do produto: ")
-                            editou()
+                            editou(self.content[posição])
                         case "3":
                             self.content[posição]['Quantidade'] = input("Digite a nova quantidade do produto: ")
-                            editou()
+                            editou(self.content[posição])
                         case "4":
                             self.content[posição]['Unidade'] = input("Digite a nova unidade do produto: ")
-                            editou()
+                            editou(self.content[posição])
                         case "5":
                             self.content[posição]['Preço'] = input("Digite o novo preço do produto: ")
-                            editou()
-                        case "5":
+                            editou(self.content[posição])
+                        case "6":
                             self.content[posição]['Validade'] = input("Digite a nova validade do produto: ")
-                            editou()
+                            editou(self.content[posição])
                         case _:
                             print(f'{vermelho}Opção inválida{branco}')
                 break
