@@ -4,6 +4,5 @@ Código;Nome;Quantidade;Unidade;Preço;Validade
 0003;Coca-cola; 9000; ml;0,03;09/09/2029
 0004;Batata;8;Kg;5,00;12/04/2025
 0005;Hamburger simples;29;unidades;1,50;12/05/2025
-0006;Ketchup (Litros); 4; l;0,50;09/07/2025
+0006;Ketchup (Litros); 4;litros;0,50;09/07/2025
 0007;Alface;2;Kilos;1,50;08/04/2025
-2;2;2;2;2;08/04/2025

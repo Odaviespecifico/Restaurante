@@ -51,12 +51,28 @@ def editou(item):
     mostrar_item(item)
     print(f'{verde}Produto alterado com sucesso!{branco}')
 
-def writedict(file,data):
-    with open("file","w",encoding="UTF-8",newline="") as estoque:
-        writer = csv.DictWriter(estoque, fieldnames=data[1].keys(), delimiter=';')
+def writedict(file,data,fn):
+    with open(str(file),"w",encoding="UTF-8",newline="") as estoque:
+        writer = csv.DictWriter(estoque, fieldnames=fn, delimiter=';')
         writer.writeheader()
         writer.writerows(data)
 
+def disponiveis(itens,ingredientes):
+    global c
+    print(azul,"-"*30)
+    print("Itens disponíveis no estoque:")
+    print('-'*30,branco)
+    c = 1
+    for i in itens:
+        for j in ingredientes:
+            if i["Nome"] in j[0]:
+                print(f'{c} - {azul}{i["Nome"]}{branco} - {i["Quantidade"]} {i["Unidade"]} - R${i["Preço"]}')
+                c += 1
+                break
+        else:
+            print(f'{c} - {rosa}{i["Nome"]}{branco} - {i["Quantidade"]} {i["Unidade"]} - R${i["Preço"]}')
+            c += 1
+            
 opções_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha

@@ -35,7 +35,9 @@ while True:
                 op = input("Digite a opção desejada: ")
                 match op:
                     case '1':
-                        e.consultar()
+                        c.consultar()
+                    case '2':
+                        c.cadastrar()
         case '3':
             pass
         case '4':

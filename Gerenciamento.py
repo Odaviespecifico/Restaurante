@@ -8,6 +8,7 @@ class estoque:
             self.content = []
             for row in csv.DictReader(estoque,delimiter=';'):
                 self.content.append(row)
+        self.fn = ('Código','Nome','Quantidade','Unidade','Preço','Validade')
     def consultar(self):
         global editar
         if editar != True:
@@ -29,7 +30,7 @@ class estoque:
         self.content.append(item)
         mostrar_item(item)
         print(verde,'produto cadastrado com sucesso',branco)
-        writedict("estoque.csv",self.content)
+        writedict("estoque.csv",self.content,self.fn)
 
     def editar(self):
         global editar
@@ -80,7 +81,7 @@ class estoque:
             if posição > 0:
                 print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
-        writedict("estoque.csv",self.content)
+        writedict("estoque.csv",self.content,self.fn)
         
     def remover(self):
         print_ornamentado('Remover produto')
@@ -104,29 +105,74 @@ class estoque:
         else:
             print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
-        writedict("estoque.csv",self.content)
+        writedict("estoque.csv",self.content,self.fn)
                         
 class cardapio:
     def __init__(self):
+        self.cardápio = []
+        self.estoque = []
         with open("cardápio.csv",encoding='UTF-8') as items:
-            self.cardápio = csv.DictReader(items,delimiter=';')
+            for i in csv.DictReader(items,delimiter=';'):
+                self.cardápio.append(i)
         with open('estoque.csv',encoding='UTF-8') as items:
-            self.estoque = csv.DictReader(items,delimiter=';')
+            for i in csv.DictReader(items,delimiter=';'):
+                self.estoque.append(i)
+        self.fn = ('Nome','Preço','Descrição','Ingredientes')
+        print(self.cardápio)
+        print(self.estoque)
     def consultar(self):
         print_ornamentado('Itens no cardápio')
+        print(self.cardápio)
+        c = 1
+        for i in self.cardápio:
+            print(azul,end="")
+            print("-"*30)
+            print(f"Item {c}:")
+            print(f"{amarelo}{i['Nome']}{branco} - {verde}R$ {i['Preço']}")
+            print(f"{rosa}{i['Descrição']}")
+            print(azul,end="")
+            print("-"*30)
+            print(branco)
+            c += 1
     
     def cadastrar(self):
         print_ornamentado('Cadastrar produto')
         nome = input("Digite o nome do produto: ") 
         preço = input("Digite o preço do produto: ")
         descrição = input("Digite a descrição do produto: ")
-
-        e.consultar()
-        
-        with open("cardápio.txt","w",encoding="UTF-8") as cardápio:
-            cardápio.write(str(self.estoque))
-
+        ingredientes = []
+        c = 1
+        disponiveis(self.estoque,ingredientes)
+        while True:
+            escolha = input("Digite o nome ou número do item que deseja adicionar a receita: ")
+            for i in self.estoque:
+                if i["Nome"] == escolha:
+                    quantidade = input(f"Digite a quantidade de {i['Nome']} que deseja adicionar: ")
+                    print(f'{verde}Produto adicionado com sucesso!{branco}')
+                    ingredientes.append((i["Nome"], quantidade))
+                    break
+                try:
+                    if int(escolha) <= c:
+                        quantidade = input(f"Digite a quantidade de {self.estoque[int(escolha)-1]['Nome']} que deseja adicionar: ")
+                        ingredientes.append((self.estoque[int(escolha)-1]['Nome'], quantidade))
+                        print(f'{verde}Produto adicionado com sucesso!{branco}')
+                        break
+                except:
+                    pass
+                c += 1
+            else:
+                print(f'{vermelho}Item não encontrado!{branco}')
+            
+            continue_ = input("Deseja adicionar mais ingredientes? (s/n): ")
+            if continue_ == 's':
+                disponiveis(self.estoque,ingredientes)
+                continue
+            else:
+                self.cardápio.append({'Nome': nome, 'Preço': preço, 'Descrição': descrição, "Ingredientes":ingredientes})
+                writedict("cardápio.csv",self.cardápio,self.fn)
+                break
+                
 if __name__ == '__main__':
     e = estoque()
     c = cardapio()
-    c.cadastrar()
+    c.consultar()
