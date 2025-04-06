@@ -1,5 +1,5 @@
 from Gerenciamento import estoque
-1
+from Uteis import *
 
 e = estoque()
 print_ornamentado('Gerenciamento de restaurantes')

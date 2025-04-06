@@ -3,20 +3,20 @@ from Uteis import *
 
 class estoque:
     def __init__(self):
-        with open("Desafio 01\estoque.txt",encoding='UTF-8') as items:
+        with open("estoque.txt",encoding='UTF-8') as items:
             self.content = eval(items.read())
 
     def consultar(self):
         print_ornamentado('Itens no estoque')
         for i in self.content:
-            print('-'*10)
-            print(f"Código do item: {i['Código']}")
-            print(f"Nome do item: {i['Nome']}")
-            print(f"Quantidade: {i['Quantidade']}{i['Unidade']}")
-            print(f"preço: R${i['Preço']}")
-            print(f"Validade: {i['Validade']}")
+            print('-'*20)
+            print(f"{azul}Código do item:{branco} {i['Código']}")
+            print(f"{azul}Nome do item:{branco} {i['Nome']}")
+            print(f"{azul}Quantidade:{branco} {i['Quantidade']} {i['Unidade']}")
+            print(f"{azul}preço:{branco} R${i['Preço']}")
+            print(validade_cor(i['Validade']))
         else:
-                print('-'*10)
+                print('-'*20)
 
     def cadastrar(self):
         print("Cadastrar produto")
@@ -26,10 +26,10 @@ class estoque:
         unidade = input("Digite a unidade de medida do produto: ")
         preço = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
-        item = {"codigo":cod,"nome":nome,"quantidade":quantidade,"unidade":unidade,"preço":preço,"validade":validade}
-        self.estoque_items.append(item)
-        with open("Desafio 01\estoque.txt","w",encoding="UTF-8",newline="") as estoque:
-            estoque.write(str(self.estoque_items))
+        item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preço,"Validade":validade}
+        self.content.append(item)
+        with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
+            estoque.write(str(self.content))
 
 
 if __name__ == '__main__':

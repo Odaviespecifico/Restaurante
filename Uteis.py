@@ -1,10 +1,28 @@
+from datetime import date
 cores = {'azul': '\033[34m', 'vermelho': '\033[31m', 'verde': '\033[32m', 'amarelo': '\033[33m', 'rosa': '\033[35m', 'branco': '\033[37m'}
+azul = cores['azul']
+vermelho = cores['vermelho']
+verde = cores['verde']
+amarelo = cores['amarelo']
+branco = cores['branco']
+
 def print_ornamentado(texto):
     print(f"{cores['azul']}")
-    print("-"*len(texto))
+    print("="*len(texto))
     print(texto)
-    print("-"*len(texto))
+    print("="*len(texto))
     print(f"{cores['branco']}")
+
+def validade_cor(validade):
+    ano,mes,dia = int(validade[6:]),int(validade[3:5]),int(validade[0:2])
+    diferença = (date(ano,mes,dia) - date.today()).days
+    # print(diferença)
+    if diferença >= 3:
+        return f"{azul}Validade:{branco} {verde}{validade}{branco}"
+    elif diferença >= 0:
+        return f"{azul}Validade:{branco} {amarelo}{validade}{branco}"
+    else:
+        return f"{azul}Validade:{branco} {vermelho}{validade}{branco}"
 
 opções_geral = """Opções:
 \033[35m1\033[37m - Estoque
