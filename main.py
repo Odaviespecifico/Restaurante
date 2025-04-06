@@ -20,13 +20,13 @@ while True:
                     case '3':
                         e.editar()
                     case '4':
-                        pass
+                        e.remover()
                     case '5':
                         break
                     case _:
                         print(f"{cores['vermelho']}Opção inválida{cores['branco']}")
                         continue
-            print("Menu principal")
+            print_ornamentado("Menu principal")
         case '2':
             pass
         case '3':

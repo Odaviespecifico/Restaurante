@@ -7,6 +7,7 @@ amarelo = cores['amarelo']
 branco = cores['branco']
 rosa = cores['rosa']
 
+
 def print_ornamentado(texto):
     print(f"{cores['azul']}")
     print("="*len(texto))
@@ -59,4 +60,8 @@ opções_estoque = """Opções:
 \033[35m2\033[37m - Cadastrar produto
 \033[35m3\033[37m - atualizar produto
 \033[35m4\033[37m - Remover produto
-\033[35m5\033[37m - sair"""
+\033[35m5\033[37m - voltar ao menu principal"""
+
+print_ornamentado('Gerenciamento de restaurantes')
+print_ornamentado('Sistema de gerenciamento de estoque')
+print_ornamentado('teste')

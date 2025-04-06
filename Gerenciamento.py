@@ -52,23 +52,30 @@ class estoque:
                         case "1":
                             self.content[posição]['Código'] = input("Digite o novo código do produto: ")
                             editou(self.content[posição])
+                            break
                         case "2":
                             self.content[posição]['Nome'] = input("Digite o novo nome do produto: ")
                             editou(self.content[posição])
+                            break
                         case "3":
                             self.content[posição]['Quantidade'] = input("Digite a nova quantidade do produto: ")
                             editou(self.content[posição])
+                            break
                         case "4":
                             self.content[posição]['Unidade'] = input("Digite a nova unidade do produto: ")
                             editou(self.content[posição])
+                            break
                         case "5":
                             self.content[posição]['Preço'] = input("Digite o novo preço do produto: ")
                             editou(self.content[posição])
+                            break
                         case "6":
                             self.content[posição]['Validade'] = input("Digite a nova validade do produto: ")
                             editou(self.content[posição])
+                            break
                         case _:
                             print(f'{vermelho}Opção inválida{branco}')
+                            break
                 break
             posição += 1
         else:
@@ -80,10 +87,34 @@ class estoque:
         with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
             estoque.write(str(self.content))
         
-            
+    def remover(self):
+        print_ornamentado('Remover produto')
+        global editar
+        editar = True
+        self.consultar()
+        Escolha = input('Digite o código ou nome do item que deseja remover: ')
+        posição = 0
+        for i in self.content:
+            if i["Código"] == Escolha or i["Nome"] == Escolha:
+                mostrar_item(i)
+                confirma = input(f'{vermelho}Você tem certeza que deseja remover o item {i["Nome"]}?\nDigite "s" para sim ou "n" para não: {branco}')
+                if confirma == 's':
+                    self.content.pop(posição)
+                    print(f'{vermelho}Produto removido com sucesso!{branco}')
+                else:
+                    print(f'{verde}Produto não removido!{branco}')
+                    break
+                break
+            posição += 1
+        else:
+            print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
+
+        with open("estoque.txt","w",encoding="UTF-8",newline="") as estoque:
+            estoque.write(str(self.content))
+        editar = False
                         
                         
 
 if __name__ == '__main__':
     e = estoque()
-    e.editar()
+    e.remover()
