@@ -29,7 +29,7 @@ while True:
                         continue
             print_ornamentado("Menu principal")
         case '2':
-            print_ornamentado('Estoque')
+            print_ornamentado('Cozinha')
             while True:
                 print(opções_cardapio)
                 op = input("Digite a opção desejada: ")
@@ -38,6 +38,14 @@ while True:
                         c.consultar()
                     case '2':
                         c.cadastrar()
+                    case '3':
+                        c.atualizar()
+                    case '4':
+                        c.remover()
+                    case '5':
+                        break
+                    case _:
+                        print(f"{vermelho}Opção inválida{branco}")
         case '3':
             pass
         case '4':
