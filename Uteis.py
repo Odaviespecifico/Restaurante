@@ -5,6 +5,7 @@ vermelho = cores['vermelho']
 verde = cores['verde']
 amarelo = cores['amarelo']
 branco = cores['branco']
+rosa = cores['rosa']
 
 def print_ornamentado(texto):
     print(f"{cores['azul']}")
