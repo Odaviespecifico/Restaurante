@@ -1,8 +1,9 @@
-from Gerenciamento import estoque,cardapio
+from Gerenciamento import estoque,cardapio,mesa
 from Uteis import *
 
 e = estoque()
 c = cardapio()
+m = mesa()
 print_ornamentado('Gerenciamento de restaurantes')
 while True:
     print(opções_geral)
@@ -47,7 +48,28 @@ while True:
                     case _:
                         print(f"{vermelho}Opção inválida{branco}")
         case '3':
-            pass
+            print_ornamentado("Mesas e pedidos")
+            while True:
+                print(opções_mesa)
+                op = input("Digite a opção desejada: ")
+                match op:
+                    case '1':
+                        m.exibir()
+                    case '2':
+                        m.cadatrar()
+                    case '3':
+                        m.pedido()
+                    case '4':
+                        m.mostrar_pedido()
+                    case '5':
+                        m.ocupar()
+                    case '6':
+                        for i in range(len(m.mesas)):
+                            m.livrar(i-1,False)
+                    case '7':
+                        break
+                    case _:
+                        print(f"{vermelho}Opção inválida{branco}")
         case '4':
             pass
         case '5':

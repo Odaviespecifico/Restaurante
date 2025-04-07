@@ -1,6 +1,7 @@
 import datetime
 from Uteis import *
 import csv
+import random
 editar = False
 class estoque:
     def __init__(self):
@@ -253,7 +254,112 @@ class cardapio:
         else:
             print(f'{verde}Item não removido')
             self.consultar()
+
+class mesa:
+    def __init__(self):
+        self.mesas = []
+        with open('mesa.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.mesas.append(i)
+        self.fn = ('Número','Capacidade','Status','Pessoas','Pedido')
+        # Status -> 0 = livre 1 = reservada 2 = ocupada
+    def exibir(self,colunas=5,editar=False):
+        self.__init__()
+        if editar != True:
+            print_ornamentado('Mesas')
+        for i in range(len(self.mesas)):
+            if self.mesas[i]['Status'] == '0':
+                print(f'{verde}{i+1:2}{branco}', end=" ")
+            if self.mesas[i]['Status'] == '1':
+                print(f'{amarelo}{i+1:2}{branco}', end=" ")
+            if self.mesas[i]['Status'] == '2':
+                print(f'{vermelho}{i+1:2}{branco}', end=" ")
+            if (i+1) % colunas == 0 and i != 0:
+                print()
+
+    def cadatrar(self):
+        self.exibir(editar=True)
+        print_ornamentado('Cadastrar mesa')
+        numero = input("Digite o número da mesa: ")
+        capacidade = input("Digite a capacidade da mesa: ")
+        item = {"Número":numero,"Capacidade":capacidade,"Status":0,"Pessoas":0}
+        self.mesas.append(item)
+        writedict("mesa.csv",self.mesas,self.fn)
+        print(f'{verde}Mesa cadastrada com sucesso!{branco}')
+        self.exibir(editar=True)
+
+    def livrar(self,mesa,exibir=True):
+        if exibir:
+            self.exibir(editar=True)
+        self.mesas[mesa-1]['Status'] = 0
+        self.mesas[mesa-1]['Pessoas'] = 0
+        self.mesas[mesa-1]['Pedido'] = []
+        writedict("mesa.csv",self.mesas,self.fn)
+        print(f'{verde}Mesa {mesa+2} liberada com sucesso!{branco}')
+
+    def ocupar(self,mesa='False'):
+        self.exibir(editar=True)
+        print_ornamentado('Adicionar clientes a mesa')
+        while True: #Loop para definir o número da mesa e quantidade de pessoas
+            if mesa == 'False':    
+                mesa = int(input("Digite o número da mesa que deseja ocupar: "))
+            if self.mesas[mesa-1]['Status'] == '2':
+                print(f'{vermelho}Essa mesa está ocupada, escolha outra!{branco}')
+                continue
+            if self.mesas[mesa-1]['Status'] == '1':
+                print(f'{vermelho}Essa mesa está reservada,{branco}',end=" ")
+                escolha = input('Deseja alocar o cliente mesmo assim? s/n ')
+                if escolha != 's':
+                    continue
+            pessoas = int(input(f"Digite o número de pessoas que deseja colocar na mesa {mesa}: "))
+            if pessoas > int(self.mesas[int(mesa)-1]['Capacidade']):
+                    print(f'{vermelho}A quantidade de pessoas é maior do que a capacidade da mesa. Talvez você consiga cadastrar em duas mesas!{branco}')
+            else:
+                break
+        escolha = input('Você deseja fazer uma reserva ou ocupar a mesa? r/o: ')
+        if escolha == 'r':
+            self.mesas[mesa-1]['Status'] = 1
+        else:
+            self.mesas[mesa-1]['Status'] = 2
+        self.mesas[mesa-1]['Pessoas'] = pessoas
+        writedict("mesa.csv",self.mesas,self.fn)
+        print(f'{verde}Mesa {mesa} ocupada com sucesso!{branco}')
+        self.exibir(editar=True)
+    def pedido(self):
+        self.exibir()
+        escolha = int(input('De qual mesa é o pedido? '))
+        if self.mesas[escolha-1]['Status'] == '0':
+            op = input('Essa mesa não tem clientes cadastrados, deseja adicionar um cliente? s/n: ')
+            if op == 's':
+                self.ocupar(escolha)
+            else:
+                c.consultar()
+                pass
+        c.consultar()
+        pedidos = []
+        pedido = 1
+        while True:
+            pedido = input('Digite o pedido da mesa, um item por vez, digite 0 para parar:')
+            if pedido == '0':
+                break
+            pedidos.append(int(pedido)-1)
+            print(f'{azul}Pedido da mesa {escolha-1}:{branco}',end=' ')
+            for i in range(len(pedidos)):
+                print(f"{c.cardápio[int(pedidos[i-1])]['Nome']}",end=', ')
+            else:
+                print()
+            self.mesas[escolha-1]['Pedido'] = pedidos
+            writedict('mesa.csv',self.mesas,self.fn)
+    def mostrar_pedido(self):
+        self.exibir()
+        mesa = int(input('De qual mesa deseja ver o pedido? '))
+        print(f'{azul}Pedido da mesa {mesa}:{branco}',end=' ')
+        for i in eval(self.mesas[mesa-1]['Pedido']):
+            print(c.cardápio[i]['Nome'],end=', ')
+        else:
+            print()
+e = estoque()
+c = cardapio()
+m = mesa()
 if __name__ == '__main__':
-    e = estoque()
-    c = cardapio()
-    c.atualizar()
+    m.mostrar_pedido()

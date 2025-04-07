@@ -11,9 +11,9 @@ rosa = '\033[35m'
 
 def print_ornamentado(texto):
     print(azul)
-    print("="*len(texto))
-    print(texto)
-    print("="*len(texto))
+    print("="*30)
+    print(f"{texto:^30}")	
+    print("="*30)
     print(branco)
 
 def validade_cor(validade):
@@ -76,7 +76,7 @@ def disponiveis(itens,ingredientes):
 opções_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha
-\033[35m3\033[37m - Pedidos
+\033[35m3\033[37m - Mesas e Pedidos
 \033[35m4\033[37m - Pagamento
 \033[35m5\033[37m - sair"""
 
@@ -94,5 +94,13 @@ opções_cardapio = """Opções:
 \033[35m4\033[37m - Remover produto
 \033[35m5\033[37m - voltar ao menu principal"""
 
+opções_mesa = """Opções:
+\033[35m1\033[37m - Mostrar mesas
+\033[35m2\033[37m - Adicionar mesa
+\033[35m3\033[37m - Adicionar pedido
+\033[35m4\033[37m - Mostrar pedido
+\033[35m5\033[37m - Ocupar mesa reservada
+\033[35m6\033[37m - Liberar todas as mesas
+\033[35m7\033[37m - voltar ao menu principal"""
 if __name__ == "__main__":
     print(validade_cor('02/04/2025'))

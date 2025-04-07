@@ -1,6 +1,7 @@
 import csv
-itens = []
-with open('estoque.csv',encoding='UTF-8') as estoque:
-    for row in csv.DictReader(estoque,delimiter=';'):
-        itens.append(row)
-print(itens)
+from Uteis import *
+
+
+exibir_mesa(mesas,5)
+
+writedict('mesa.csv',mesas,('Número','Capacidade','Status',"Pessoas"))
