@@ -35,7 +35,7 @@ def mostrar_item(item,editar=False):
         print(f"{azul}Código do item:{branco} {item['Código']}")
         print(f"{azul}Nome do item:{branco} {item['Nome']}")
         print(f"{azul}Quantidade:{branco} {item['Quantidade']} {item['Unidade']}")
-        print(f"{azul}preço:{branco} R${item['Preço']}")
+        print(f"{azul}preço:{branco} R$ {item['Preço']}")
         print(validade_cor(item['Validade']))
     else:
         print('-'*20)
@@ -43,7 +43,7 @@ def mostrar_item(item,editar=False):
         print(f"2 - {azul}Nome do item:{branco} {item['Nome']}")
         print(f"3 - {azul}Quantidade:{branco} {item['Quantidade']}")
         print(f"4 - {azul}Unidade:{branco} {item['Unidade']}")
-        print(f"5 - {azul}preço:{branco} R${item['Preço']}")
+        print(f"5 - {azul}preço:{branco} R$ {item['Preço']}")
         print("6 - ",validade_cor(item['Validade']))
 
 def editou(item):
@@ -102,5 +102,10 @@ opções_mesa = """Opções:
 \033[35m5\033[37m - Ocupar mesa reservada
 \033[35m6\033[37m - Liberar todas as mesas
 \033[35m7\033[37m - voltar ao menu principal"""
+
+opções_pagamento = """Opções:
+\033[35m1\033[37m - Mostrar conta
+\033[35m2\033[37m - Pagar conta
+\033[35m3\033[37m - voltar ao menu principal"""
 if __name__ == "__main__":
     print(validade_cor('02/04/2025'))

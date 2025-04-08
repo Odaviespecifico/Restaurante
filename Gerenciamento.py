@@ -22,7 +22,7 @@ class estoque:
     def cadastrar(self):
         print_ornamentado('Cadastrar produto')
         cod = input("Digite o código do produto: ")
-        nome = input("Digite o nome do produto: ") 
+        nome = input("Digite o nome do produto: ").capitalize()
         quantidade = input("Digite a quantidade do produto: ")
         unidade = input("Digite a unidade de medida do produto: ")
         preço = input("Digite o preço do produto: ")
@@ -38,7 +38,7 @@ class estoque:
         editar = True
         print_ornamentado('Alterar produto')
         self.consultar()
-        Escolha = input('Digite o código ou nome do item que deseja editar: ')
+        Escolha = input('Digite o código ou nome do item que deseja editar: ').capitalize()
         posição = 0
         for i in self.content:
             # print(i)
@@ -304,10 +304,10 @@ class mesa:
             if mesa == 'False':    
                 mesa = int(input("Digite o número da mesa que deseja ocupar: "))
             if self.mesas[mesa-1]['Status'] == '2':
-                print(f'{vermelho}Essa mesa está ocupada, escolha outra!{branco}')
+                print(f'{vermelho}A mesa {mesa-1} está ocupada, escolha outra!{branco}')
                 continue
             if self.mesas[mesa-1]['Status'] == '1':
-                print(f'{vermelho}Essa mesa está reservada,{branco}',end=" ")
+                print(f'{vermelho}A mesa {mesa-1} está reservada,{branco}',end=" ")
                 escolha = input('Deseja alocar o cliente mesmo assim? s/n ')
                 if escolha != 's':
                     continue
@@ -325,11 +325,14 @@ class mesa:
         writedict("mesa.csv",self.mesas,self.fn)
         print(f'{verde}Mesa {mesa} ocupada com sucesso!{branco}')
         self.exibir(editar=True)
-    def pedido(self):
+    def pedido(self,mesa=-1):
         self.exibir()
-        escolha = int(input('De qual mesa é o pedido? '))
+        if mesa == -1:
+            escolha = int(input('De qual mesa é o pedido? '))
+        else:
+            escolha = mesa
         if self.mesas[escolha-1]['Status'] == '0':
-            op = input('Essa mesa não tem clientes cadastrados, deseja adicionar um cliente? s/n: ')
+            op = input(f'A mesa {azul}{escolha}{branco} não tem clientes cadastrados, deseja adicionar um cliente? s/n: ')
             if op == 's':
                 self.ocupar(escolha)
             else:
@@ -358,8 +361,70 @@ class mesa:
             print(c.cardápio[i]['Nome'],end=', ')
         else:
             print()
-e = estoque()
+
+class pagamento:
+    def __init__(self):
+        self.mesas = []
+        self.cardápio = []
+        self.estoque = []
+        self.fn = ["Número","Capacidade","Status","Pessoas","Pedido"]
+        with open('mesa.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.mesas.append(i)
+        with open("cardápio.csv",encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.cardápio.append(i)
+        with open('estoque.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.estoque.append(i)
+    def conta_total(self,mesa=-1):
+        self.__init__()
+        m.exibir()
+        if mesa == -1:
+            mesa = int(input("Digite a mesa que você deseja a conta: "))
+            #mesa = 1
+        total = 0
+        if self.mesas[mesa-1]['Pedido'] == '[]':
+            i = input(f"{vermelho}A mesa não tem conta.{branco} Deseja cadastrar? s/n")
+            if i == 's':
+                m.pedido(mesa)
+                p.conta_total(mesa)
+        else:
+            for i in eval(self.mesas[mesa-1]['Pedido']):
+                fill = '.'
+                aling = ">"
+                dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
+                print(f"{self.cardápio[int(i)-1]['Nome']:.<30}R$ {self.cardápio[int(i)-1]['Preço']:>}")
+                total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
+            print(f"{'Total:':.<30}{verde}R$ {total:>}{branco}")
+    def pagamento(self,mesa=-1):
+        m.exibir()
+        if mesa == -1:
+            mesa = int(input("Digite a mesa que você deseja pagar a conta: "))
+        if self.mesas[mesa-1]['Pedido'] == '[]':
+            i = input(f"{vermelho}A mesa não tem conta.{branco} Deseja cadastrar? s/n")
+            if i == 's':
+                m.pedido(mesa)
+            else:
+                exit()
+        total = 0
+        for i in eval(self.mesas[mesa-1]['Pedido']):
+            fill = '.'
+            aling = ">"
+            dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
+            total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
+        op = input(f'Você deseja dividir a conta no valor de R${verde}{total}{branco} entre as pessoas da mesa? s/n').lower()
+        if op == 's':
+            pessoa = self.mesas[mesa-1]['Pessoas']
+            print(f'Temos {azul}{pessoa}{branco} pessoas na mesa. O valor por pessoa fica R${verde}{total/int(pessoa):.2f}{branco}')
+            op2 = input('Utilize a maquineta e faça o pagamento. Digite enter quanto o pagamento for feito.')
+        self.mesas[mesa-1]['Pedido'] = []
+        op2 = input('Utilize a maquineta e faça o pagamento. Digite enter quanto o pagamento for feito.')
+        print(f'{verde}Pedido pago com sucesso.{branco}')
+        writedict('mesa.csv',self.mesas,self.fn)
+                  
 c = cardapio()
 m = mesa()
+p = pagamento()
 if __name__ == '__main__':
-    m.mostrar_pedido()
+    p.pagamento()

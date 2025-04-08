@@ -1,9 +1,10 @@
-from Gerenciamento import estoque,cardapio,mesa
+from Gerenciamento import estoque,cardapio,mesa,pagamento
 from Uteis import *
 
 e = estoque()
 c = cardapio()
 m = mesa()
+p = pagamento()
 print_ornamentado('Gerenciamento de restaurantes')
 while True:
     print(opções_geral)
@@ -71,7 +72,19 @@ while True:
                     case _:
                         print(f"{vermelho}Opção inválida{branco}")
         case '4':
-            pass
+            print_ornamentado('Pagamento')
+            while True:
+                print(opções_pagamento)
+                op = input('Digite a opção desejada: ')
+                match op:
+                    case '1':
+                        p.conta_total()
+                    case '2':
+                        p.pagamento()
+                    case '3':
+                        break
+                    case _:
+                        print(f'{vermelho}Opção inválida{branco}')
         case '5':
             break
         case _:
