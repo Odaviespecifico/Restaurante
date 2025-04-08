@@ -397,6 +397,13 @@ class pagamento:
                 print(f"{self.cardápio[int(i)-1]['Nome']:.<30}R$ {self.cardápio[int(i)-1]['Preço']:>}")
                 total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
             print(f"{'Total:':.<30}{verde}R$ {total:>}{branco}")
+            acrescimo = input(r'Deseja adicionar os 10% de serviço? s/n')
+            if acrescimo == 's':
+                total = round(total*1.1,2)
+            print(f"{'Total (Com acrescimo):':.<30}{verde}R$ {total:>}{branco}")
+        pagar = input('Deseja pagar a conta? s/n: ')
+        if pagar == 's':
+            self.pagamento(mesa)
     def pagamento(self,mesa=-1):
         m.exibir()
         if mesa == -1:
@@ -413,16 +420,51 @@ class pagamento:
             aling = ">"
             dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
             total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
-        op = input(f'Você deseja dividir a conta no valor de R${verde}{total}{branco} entre as pessoas da mesa? s/n').lower()
+        op = input(f"Você deseja dividir a conta no valor de R${verde}{total}{branco} entre as {self.mesas[mesa-1]['Pessoas']} pessoas da mesa {mesa}? s/n: ").lower()
+        pessoa = self.mesas[mesa-1]['Pessoas']
+        valor_de_cada = round(total/int(pessoa))
         if op == 's':
-            pessoa = self.mesas[mesa-1]['Pessoas']
-            print(f'Temos {azul}{pessoa}{branco} pessoas na mesa. O valor por pessoa fica R${verde}{total/int(pessoa):.2f}{branco}')
-            op2 = input('Utilize a maquineta e faça o pagamento. Digite enter quanto o pagamento for feito.')
+            print(f'Temos {azul}{pessoa}{branco} pessoas na mesa. O valor por pessoa fica R${verde}{valor_de_cada:.2f}{branco}')
+            op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d: ')
+            if op2 == 'd':
+                self.troco(valor_de_cada,mesa,True)
+            if op2 == 'p':
+                for i in range(self.mesas[mesa-1]['Pessoas']):
+                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada}{branco} da pessoa {azul}{i+1}{branco}. Precione enter quando o pagamento for feito')
+        if op == 'n':
+            op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d:')
+            if op2 == 'd':
+                self.troco(valor_de_cada,mesa,False)
+            if op2 == 'p':
+                input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada}{branco} do cliente. Precione enter quando o pagamento for feito')
+                    
         self.mesas[mesa-1]['Pedido'] = []
-        op2 = input('Utilize a maquineta e faça o pagamento. Digite enter quanto o pagamento for feito.')
         print(f'{verde}Pedido pago com sucesso.{branco}')
+        m.livrar(mesa-1,False)
         writedict('mesa.csv',self.mesas,self.fn)
-                  
+    def troco(self,valor,mesa,plural=False):
+        if plural == True:
+            for i in range(int(self.mesas[mesa-1]['Pessoas'])):
+                print(f'Cobre {verde}R${valor}{branco} da pessoa {i}.')
+                pago = float(input('Quanto foi pago? R$'))
+                if pago > valor:
+                    print(f'Você deve devolver {verde}R${valor-pago}{branco} de troco.')
+                if pago == valor:
+                    print('Você não precisa dar troco.')
+                if pago < valor:
+                    print(f'{vermelho}O cliente não pagou o suficiente{branco}')
+                    print(f'Ele ainda deve pagar {vermelho}R$ {valor - pago}{branco}')
+        if plural == False:
+            print(f'Cobre {verde}R${valor}{branco} do cliente.')
+            pago = float(input('Quanto foi pago? R$'))
+            if pago > valor:
+                print(f'Você deve devolver {verde}R${valor-pago}{branco} de troco.')
+            if pago == valor:
+                print('Você não precisa dar troco.')
+            if pago < valor:
+                print(f'{vermelho}O cliente não pagou o suficiente{branco}')
+                print(f'Ele ainda deve pagar {vermelho}R$ {valor - pago}{branco}')
+
 c = cardapio()
 m = mesa()
 p = pagamento()
