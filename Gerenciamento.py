@@ -25,9 +25,9 @@ class estoque:
         nome = input("Digite o nome do produto: ").capitalize()
         quantidade = input("Digite a quantidade do produto: ")
         unidade = input("Digite a unidade de medida do produto: ")
-        preço = input("Digite o preço do produto: ")
+        preco = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
-        item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preço,"Validade":validade}
+        item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preco,"Validade":validade}
         self.content.append(item)
         mostrar_item(item)
         print(verde,'produto cadastrado com sucesso',branco)
@@ -39,7 +39,7 @@ class estoque:
         print_ornamentado('Alterar produto')
         self.consultar()
         Escolha = input('Digite o código ou nome do item que deseja editar: ').capitalize()
-        posição = 0
+        posicao = 0
         for i in self.content:
             # print(i)
             if i["Código"] == Escolha or i["Nome"] == Escolha:
@@ -48,38 +48,38 @@ class estoque:
                     escolha = input(f"{rosa}Qual parte você quer editar? {branco}")
                     match escolha:
                         case "1":
-                            self.content[posição]['Código'] = input("Digite o novo código do produto: ")
-                            editou(self.content[posição])
+                            self.content[posicao]['Código'] = input("Digite o novo código do produto: ")
+                            editou(self.content[posicao])
                             break
                         case "2":
-                            self.content[posição]['Nome'] = input("Digite o novo nome do produto: ")
-                            editou(self.content[posição])
+                            self.content[posicao]['Nome'] = input("Digite o novo nome do produto: ")
+                            editou(self.content[posicao])
                             break
                         case "3":
-                            self.content[posição]['Quantidade'] = input("Digite a nova quantidade do produto: ")
-                            editou(self.content[posição])
+                            self.content[posicao]['Quantidade'] = input("Digite a nova quantidade do produto: ")
+                            editou(self.content[posicao])
                             break
                         case "4":
-                            self.content[posição]['Unidade'] = input("Digite a nova unidade do produto: ")
-                            editou(self.content[posição])
+                            self.content[posicao]['Unidade'] = input("Digite a nova unidade do produto: ")
+                            editou(self.content[posicao])
                             break
                         case "5":
-                            self.content[posição]['Preço'] = input("Digite o novo preço do produto: ")
-                            editou(self.content[posição])
+                            self.content[posicao]['Preço'] = input("Digite o novo preço do produto: ")
+                            editou(self.content[posicao])
                             break
                         case "6":
-                            self.content[posição]['Validade'] = input("Digite a nova validade do produto: ")
-                            editou(self.content[posição])
+                            self.content[posicao]['Validade'] = input("Digite a nova validade do produto: ")
+                            editou(self.content[posicao])
                             break
                         case _:
                             print(f'{vermelho}Opção inválida{branco}')
                             break
                 break
-            posição += 1
+            posicao += 1
         else:
-            if posição == 0:
+            if posicao == 0:
                 print(f'{vermelho}Item não encontrado!{branco}')
-            if posição > 0:
+            if posicao > 0:
                 print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
         writedict("estoque.csv",self.content,self.fn)
@@ -268,7 +268,9 @@ class mesa:
             for i in csv.DictReader(items,delimiter=';'):
                 self.mesas.append(i)
         self.fn = ('Número','Capacidade','Status','Pessoas','Pedido')
+        
         # Status -> 0 = livre 1 = reservada 2 = ocupada
+        
     def exibir(self,colunas=5,editar=False):
         self.__init__()
         if editar != True:
@@ -301,7 +303,7 @@ class mesa:
         self.mesas[mesa-1]['Pessoas'] = 0
         self.mesas[mesa-1]['Pedido'] = []
         writedict("mesa.csv",self.mesas,self.fn)
-        print(f'{verde}Mesa {mesa+2} liberada com sucesso!{branco}')
+        print(f'{verde}Mesa {mesa+1} liberada com sucesso!{branco}')
 
     def ocupar(self,mesa='False'):
         self.exibir(editar=True)
@@ -310,10 +312,10 @@ class mesa:
             if mesa == 'False':    
                 mesa = int(input("Digite o número da mesa que deseja ocupar: "))
             if self.mesas[mesa-1]['Status'] == '2':
-                print(f'{vermelho}A mesa {mesa-1} está ocupada, escolha outra!{branco}')
+                print(f'{vermelho}A mesa {mesa} está ocupada, escolha outra!{branco}')
                 continue
             if self.mesas[mesa-1]['Status'] == '1':
-                print(f'{vermelho}A mesa {mesa-1} está reservada,{branco}',end=" ")
+                print(f'{vermelho}A mesa {mesa} está reservada,{branco}',end=" ")
                 escolha = input('Deseja alocar o cliente mesmo assim? s/n ')
                 if escolha != 's':
                     continue
@@ -428,7 +430,7 @@ class pagamento:
             total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
         op = input(f"Você deseja dividir a conta no valor de R${verde}{total}{branco} entre as {self.mesas[mesa-1]['Pessoas']} pessoas da mesa {mesa}? s/n: ").lower()
         pessoa = self.mesas[mesa-1]['Pessoas']
-        valor_de_cada = round(total/int(pessoa))
+        valor_de_cada = (total/int(pessoa))
         if op == 's':
             print(f'Temos {azul}{pessoa}{branco} pessoas na mesa. O valor por pessoa fica R${verde}{valor_de_cada:.2f}{branco}')
             op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d: ')
@@ -436,14 +438,16 @@ class pagamento:
                 self.troco(valor_de_cada,mesa,True)
             if op2 == 'p':
                 for i in range(self.mesas[mesa-1]['Pessoas']):
-                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada}{branco} da pessoa {azul}{i+1}{branco}. Precione enter quando o pagamento for feito')
-        if op == 'n':
+                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada:.2f}{branco} da pessoa {azul}{i+1}{branco}. Precione enter quando o pagamento for feito')
+        else:
             op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d:')
             if op2 == 'd':
                 self.troco(valor_de_cada,mesa,False)
             if op2 == 'p':
                 input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada}{branco} do cliente. Precione enter quando o pagamento for feito')
                     
+        self.mesas[mesa-1]['Status'] = 0
+        self.mesas[mesa-1]['Pessoas'] = 0
         self.mesas[mesa-1]['Pedido'] = []
         print(f'{verde}Pedido pago com sucesso.{branco}')
         m.livrar(mesa-1,False)
@@ -451,10 +455,10 @@ class pagamento:
     def troco(self,valor,mesa,plural=False):
         if plural == True:
             for i in range(int(self.mesas[mesa-1]['Pessoas'])):
-                print(f'Cobre {verde}R${valor}{branco} da pessoa {i}.')
+                print(f'Cobre {verde}R${valor}{branco} da pessoa {i+1}.')
                 pago = float(input('Quanto foi pago? R$'))
                 if pago > valor:
-                    print(f'Você deve devolver {verde}R${valor-pago}{branco} de troco.')
+                    print(f'Você deve devolver {verde}R${pago-valor:.2f}{branco} de troco.')
                 if pago == valor:
                     print('Você não precisa dar troco.')
                 if pago < valor:

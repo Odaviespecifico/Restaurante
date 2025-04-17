@@ -73,28 +73,28 @@ def disponiveis(itens,ingredientes):
             print(f'{c} - {rosa}{i["Nome"]}{branco} - {i["Quantidade"]} {i["Unidade"]} - R${i["Preço"]}')
             c += 1
             
-opçoes_geral = """Opções:
+opcoes_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha
 \033[35m3\033[37m - Mesas e Pedidos
 \033[35m4\033[37m - Pagamento
 \033[35m5\033[37m - sair"""
 
-opçoes_estoque = """Opções:
+opcoes_estoque = """Opções:
 \033[35m1\033[37m - Consultar estoque
 \033[35m2\033[37m - Cadastrar produto
 \033[35m3\033[37m - atualizar produto
 \033[35m4\033[37m - Remover produto
 \033[35m5\033[37m - voltar ao menu principal"""
 
-opçoes_cardapio = """Opções:
+opcoes_cardapio = """Opções:
 \033[35m1\033[37m - Consultar cardápio
 \033[35m2\033[37m - Cadastrar produto
 \033[35m3\033[37m - atualizar produto
 \033[35m4\033[37m - Remover produto
 \033[35m5\033[37m - voltar ao menu principal"""
 
-opçoes_mesa = """Opções:
+opcoes_mesa = """Opções:
 \033[35m1\033[37m - Mostrar mesas
 \033[35m2\033[37m - Adicionar mesa
 \033[35m3\033[37m - Adicionar pedido
@@ -103,7 +103,7 @@ opçoes_mesa = """Opções:
 \033[35m6\033[37m - Liberar todas as mesas
 \033[35m7\033[37m - voltar ao menu principal"""
 
-opçoes_pagamento = """Opções:
+opcoes_pagamento = """Opções:
 \033[35m1\033[37m - Mostrar conta
 \033[35m2\033[37m - Pagar conta
 \033[35m3\033[37m - voltar ao menu principal"""
