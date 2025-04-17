@@ -11,20 +11,20 @@ rosa = '\033[35m'
 
 def print_ornamentado(texto):
     print(azul)
-    print("="*30)
+    print("="*29)
     print(f"{texto:^30}")	
-    print("="*30)
+    print("="*29)
     print(branco)
 
 def validade_cor(validade):
     ano,dia,mes = int(validade[6:]),int(validade[0:2]),int(validade[3:5])
     # print(date(ano,mes,dia))
     # print(date.today())
-    diferença = (date(ano,mes,dia) - date.today()).days
+    diferenca = (date(ano,mes,dia) - date.today()).days
     # print(diferença)
-    if diferença >= 3:
+    if diferenca >= 3:
         return f"{azul}Validade:{branco} {verde}{validade}{branco}"
-    elif diferença >= 0:
+    elif diferenca >= 0:
         return f"{azul}Validade:{branco} {amarelo}{validade}{branco}"
     else:
         return f"{azul}Validade:{branco} {vermelho}{validade}{branco}"
@@ -73,28 +73,28 @@ def disponiveis(itens,ingredientes):
             print(f'{c} - {rosa}{i["Nome"]}{branco} - {i["Quantidade"]} {i["Unidade"]} - R${i["Preço"]}')
             c += 1
             
-opções_geral = """Opções:
+opçoes_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha
 \033[35m3\033[37m - Mesas e Pedidos
 \033[35m4\033[37m - Pagamento
 \033[35m5\033[37m - sair"""
 
-opções_estoque = """Opções:
+opçoes_estoque = """Opções:
 \033[35m1\033[37m - Consultar estoque
 \033[35m2\033[37m - Cadastrar produto
 \033[35m3\033[37m - atualizar produto
 \033[35m4\033[37m - Remover produto
 \033[35m5\033[37m - voltar ao menu principal"""
 
-opções_cardapio = """Opções:
+opçoes_cardapio = """Opções:
 \033[35m1\033[37m - Consultar cardápio
 \033[35m2\033[37m - Cadastrar produto
 \033[35m3\033[37m - atualizar produto
 \033[35m4\033[37m - Remover produto
 \033[35m5\033[37m - voltar ao menu principal"""
 
-opções_mesa = """Opções:
+opçoes_mesa = """Opções:
 \033[35m1\033[37m - Mostrar mesas
 \033[35m2\033[37m - Adicionar mesa
 \033[35m3\033[37m - Adicionar pedido
@@ -103,9 +103,10 @@ opções_mesa = """Opções:
 \033[35m6\033[37m - Liberar todas as mesas
 \033[35m7\033[37m - voltar ao menu principal"""
 
-opções_pagamento = """Opções:
+opçoes_pagamento = """Opções:
 \033[35m1\033[37m - Mostrar conta
 \033[35m2\033[37m - Pagar conta
 \033[35m3\033[37m - voltar ao menu principal"""
+
 if __name__ == "__main__":
     print(validade_cor('02/04/2025'))

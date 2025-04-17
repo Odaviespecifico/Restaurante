@@ -110,11 +110,11 @@ class estoque:
                         
 class cardapio:
     def __init__(self):
-        self.cardápio = []
+        self.cardapio = []
         self.estoque = []
         with open("cardápio.csv",encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
-                self.cardápio.append(i)
+                self.cardapio.append(i)
         with open('estoque.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.estoque.append(i)
@@ -122,7 +122,7 @@ class cardapio:
     def consultar(self):
         print_ornamentado('Itens no cardápio')
         c = 1
-        for i in self.cardápio:
+        for i in self.cardapio:
             print(azul,end="")
             if c == 1:
                 print("-"*30)
@@ -165,16 +165,17 @@ class cardapio:
             continue_ = input("Deseja adicionar mais ingredientes? (s/n): ")
             if continue_ == 's':
                 disponiveis(self.estoque,ingredientes)
+                print(self.estoque)
                 continue
             else:
-                self.cardápio.append({'Nome': nome, 'Preço': preço, 'Descrição': descrição, "Ingredientes":ingredientes})
-                writedict("cardápio.csv",self.cardápio,self.fn)
+                self.cardapio.append({'Nome': nome, 'Preço': preço, 'Descrição': descrição, "Ingredientes":ingredientes})
+                writedict("cardápio.csv",self.cardapio,self.fn)
                 break
     def atualizar(self):
         self.consultar()
         escolha = int(input("Digite o número do item que deseja alterar: "))
-        if escolha <= len(self.cardápio):
-            item = self.cardápio[escolha-1]
+        if escolha <= len(self.cardapio):
+            item = self.cardapio[escolha-1]
             print(azul,end="")
             print("-"*30)
             print(f"{amarelo}1 - {item['Nome']}{branco}")
@@ -200,32 +201,32 @@ class cardapio:
         match escolha2:
             case "1":
                 print(branco,end="")
-                self.cardápio[escolha-1]['Nome'] = input("Digite o novo nome do produto: ") 
+                self.cardapio[escolha-1]['Nome'] = input("Digite o novo nome do produto: ") 
                 self.consultar()
             case "2":
                 print(branco,end="")
-                self.cardápio[escolha-1]['Preço'] = input("Digite o novo preço do produto: ") 
+                self.cardapio[escolha-1]['Preço'] = input("Digite o novo preço do produto: ") 
                 self.consultar()
             case "3":
                 print(branco,end="")
-                self.cardápio[escolha-1]['Descrição'] = input("Digite a nova descrição do produto: ") 
+                self.cardapio[escolha-1]['Descrição'] = input("Digite a nova descrição do produto: ") 
                 self.consultar()
             case "4":
                 ingredientes = []
                 c = 1
                 disponiveis(self.estoque,ingredientes)
                 while True:
-                    escolha = input("Digite o nome ou número do item que deseja adicionar a receita: ")
+                    escolha3 = input("Digite o nome ou número do item que deseja adicionar a receita: ")
                     for i in self.estoque:
-                        if i["Nome"] == escolha:
+                        if i["Nome"] == escolha3:
                             quantidade = input(f"Digite a quantidade de {i['Nome']} que deseja adicionar: ")
                             print(f'{verde}Produto adicionado com sucesso!{branco}')
                             ingredientes.append((i["Nome"], quantidade))
                             break
                         try:
-                            if int(escolha) <= c:
-                                quantidade = input(f"Digite a quantidade de {self.estoque[int(escolha)-1]['Nome']} que deseja adicionar: ")
-                                ingredientes.append((self.estoque[int(escolha)-1]['Nome'], quantidade))
+                            if int(escolha3) <= c:
+                                quantidade = input(f"Digite a quantidade de {self.estoque[int(escolha3)-1]['Nome']} que deseja adicionar: ")
+                                ingredientes.append((self.estoque[int(escolha3)-1]['Nome'], quantidade))
                                 print(f'{verde}Produto adicionado com sucesso!{branco}')
                                 break
                         except:
@@ -237,18 +238,23 @@ class cardapio:
                     continue_ = input("Deseja adicionar mais ingredientes? (s/n): ")
                     if continue_ == 's':
                         disponiveis(self.estoque,ingredientes)
+                        print(f'{escolha=}')
+                        print(self.cardapio)
                         continue
                     else:
-                        self.cardápio[escolha-1]['Ingredientes'] = ingredientes
+                        for i in self.cardapio:
+                            print(f'A linha é: {i}')
+                            print(escolha)
+                        self.cardapio[int(escolha-1)]['Ingredientes'] = ingredientes
                         break
-        writedict("cardápio.csv",self.cardápio,self.fn)
+        writedict("cardápio.csv",self.cardapio,self.fn)
     def remover(self):
         self.consultar()
         escolha = int(input("Digite o número do item que deseja remover: "))
-        escolha2 = input(f"{vermelho}Certeza que deseja remover {self.cardápio[escolha-1]['Nome']}? s/n")
+        escolha2 = input(f"{vermelho}Certeza que deseja remover {self.cardapio[escolha-1]['Nome']}? s/n")
         if escolha2 == 's':
-            self.cardápio.pop(escolha-1)
-            writedict("cardápio.csv",self.cardápio,self.fn)
+            self.cardapio.pop(escolha-1)
+            writedict("cardápio.csv",self.cardapio,self.fn)
             print(f"Item removido com sucesso{branco}")
             self.consultar()
         else:
@@ -348,7 +354,7 @@ class mesa:
             pedidos.append(int(pedido)-1)
             print(f'{azul}Pedido da mesa {escolha-1}:{branco}',end=' ')
             for i in range(len(pedidos)):
-                print(f"{c.cardápio[int(pedidos[i-1])]['Nome']}",end=', ')
+                print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}",end=', ')
             else:
                 print()
             self.mesas[escolha-1]['Pedido'] = pedidos
@@ -358,7 +364,7 @@ class mesa:
         mesa = int(input('De qual mesa deseja ver o pedido? '))
         print(f'{azul}Pedido da mesa {mesa}:{branco}',end=' ')
         for i in eval(self.mesas[mesa-1]['Pedido']):
-            print(c.cardápio[i]['Nome'],end=', ')
+            print(c.cardapio[i]['Nome'],end=', ')
         else:
             print()
 

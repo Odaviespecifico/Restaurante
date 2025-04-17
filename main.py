@@ -7,13 +7,13 @@ m = mesa()
 p = pagamento()
 print_ornamentado('Gerenciamento de restaurantes')
 while True:
-    print(opções_geral)
+    print(opçoes_geral)
     op = input("Digite a opção desejada: ")
     match op:
         case '1':
             print_ornamentado('Estoque')
             while True:
-                print(opções_estoque)
+                print(opçoes_estoque)
                 op = input("Digite a opção desejada: ")
                 match op:
                     case '1':
@@ -33,7 +33,7 @@ while True:
         case '2':
             print_ornamentado('Cozinha')
             while True:
-                print(opções_cardapio)
+                print(opçoes_cardapio)
                 op = input("Digite a opção desejada: ")
                 match op:
                     case '1':
@@ -51,7 +51,7 @@ while True:
         case '3':
             print_ornamentado("Mesas e pedidos")
             while True:
-                print(opções_mesa)
+                print(opçoes_mesa)
                 op = input("Digite a opção desejada: ")
                 match op:
                     case '1':
@@ -74,7 +74,7 @@ while True:
         case '4':
             print_ornamentado('Pagamento')
             while True:
-                print(opções_pagamento)
+                print(opçoes_pagamento)
                 op = input('Digite a opção desejada: ')
                 match op:
                     case '1':
