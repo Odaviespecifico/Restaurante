@@ -55,7 +55,7 @@ def editou(item):
     mostrar_item(item)
     print(f'{verde}Produto alterado com sucesso!{branco}')
 
-def writedict(file,data,fn):
+def writedict(file,data,fn): #Escreve dicionário
     with open(str(file),"w",encoding="UTF-8",newline="") as estoque:
         writer = csv.DictWriter(estoque, fieldnames=fn, delimiter=';')
         writer.writeheader()
@@ -102,7 +102,7 @@ opcoes_cardapio = """Opções:
 opcoes_mesa = """Opções:
 \033[35m1\033[37m - Mostrar mesas
 \033[35m2\033[37m - Cadastrar mesa
-\033[35m3\033[37m - Ocupar mesa reservada
+\033[35m3\033[37m - Ocupar mesa
 \033[35m4\033[37m - Liberar todas as mesas
 \033[35m5\033[37m - voltar ao menu principal"""
 

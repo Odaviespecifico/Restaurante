@@ -3,4 +3,4 @@ Hambúrguer simples;12,99;Um delicioso hambúrguer com carne e alface;[('Pão co
 Batata frita (m);8,99;Uma deliciosa batata frita e temperada a sal;[('Pão sem gergelim', '3')]
 Hambúrguer duplo;15,99;Ainda mais delicioso com 2 hambúrgueres;[('Pão com gergelim', '1'), ('Hambúrguer duplo', '2'), ('Alface', '0,01')]
 Milk shake;15,99;Um delicioso leite;[('Leite', '0,5'), ('Açúcar', '0,2')]
-
+Vegan burger;50,00;Delicioso hamburger ético e bondozo. Não maltrata os animais.;[('Pão sem gergelim', '1'), ('Batata', '0,02'), ('Alface', '5'), ('Cebola', '0,04')]

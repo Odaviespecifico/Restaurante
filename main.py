@@ -80,14 +80,15 @@ while True: #Menu
                         m.pedido(mesa,False)
                     case '2':
                         m.fila_de_pedidos()
-                    case '3':
+                    case '3': #TBWW
                         m.fila_de_pedidos()
-                        pedido = int(input('Qual pedido você quer alterar? '))
+                        pedido = int(input('Qual a mesa do pedido você quer alterar? '))
+                        m.pedido
                     case '4':
                         m.exibir()
-                        mesa = int(input('Qual mesa você deseja alterar o pedido? '))
+                        mesa = int(input('Qual mesa você deseja alterar o status pedido? '))
                         m.mostrar_pedido(mesa)
-                        m.pedido(mesa,False)
+                        m.status_pedido(mesa)
                     case '5':
                         break
                     case _:

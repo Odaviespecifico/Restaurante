@@ -10,3 +10,4 @@ Código;Nome;Quantidade;Unidade;Preço;Validade;Quantidade mínima
 0009;Molho rosé;100;ml;0,50;12/05/2025;1000
 0010;Leite;20;litros;3,00;17/04/2025;200
 0011;Açúcar;5;kilos;10,99;19/07/2026;20
+0012;Sorvete;200;Litros;5;19/04/2025;50

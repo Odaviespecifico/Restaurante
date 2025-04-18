@@ -154,6 +154,7 @@ class cardapio:
                 self.estoque.append(i)
         
         self.fn = ('Nome','Preço','Descrição','Ingredientes') #Fieldnames do item
+    
     def consultar(self):
         print_ornamentado('Itens no cardápio')
         c = 1
@@ -206,6 +207,7 @@ class cardapio:
                 self.cardapio.append({'Nome': nome, 'Preço': preço, 'Descrição': descrição, "Ingredientes":ingredientes})
                 writedict("cardápio.csv",self.cardapio,self.fn)
                 break
+    
     def atualizar(self):
         self.consultar()
         escolha = int(input("Digite o número do item que deseja alterar: "))
@@ -283,6 +285,7 @@ class cardapio:
                         self.cardapio[int(escolha-1)]['Ingredientes'] = ingredientes
                         break
         writedict("cardápio.csv",self.cardapio,self.fn)
+    
     def remover(self):
         self.consultar()
         escolha = int(input("Digite o número do item que deseja remover: "))
@@ -416,7 +419,6 @@ class mesa:
             self.pedidos[-1]['Itens'] = pedidos
         writedict('pedido.csv',self.pedidos,self.fnp)
 
-
     def mostrar_pedido(self,mesa=-1):
         if mesa == -1:
             self.exibir()
@@ -450,11 +452,12 @@ class mesa:
     def status_pedido(self,mesa):
         while True:
             try:
-                status = int(input("""Qual status deseja colocar? 
+                status = int(input("""Status: 
 1 - Registrado
 2 - Em preparo
 3 - Concluido
-4 - Entregue"""))
+4 - Entregue
+Qual status deseja colocar? """))
                 break
             except ValueError:
                 print(f'{vermelho}Opção inválida{branco}')
