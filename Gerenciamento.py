@@ -6,7 +6,7 @@ editar = False
 class estoque:
     def __init__(self):
         with open('estoque.csv',encoding='UTF-8') as estoque:
-            self.content = []
+            self.content = [] # Lista para armazenar o conteúdo do estoque
             for row in csv.DictReader(estoque,delimiter=';'):
                 self.content.append(row)
         self.fn = ('Código','Nome','Quantidade','Unidade','Preço','Validade')
@@ -134,7 +134,7 @@ class cardapio:
             c += 1
         print(branco,end="")
     
-    def cadastrar(self):
+    def cadastrar(self): #Cadastro de produto
         print_ornamentado('Cadastrar produto')
         nome = input("Digite o nome do produto: ") 
         preço = input("Digite o preço do produto: ")
@@ -333,6 +333,7 @@ class mesa:
         writedict("mesa.csv",self.mesas,self.fn)
         print(f'{verde}Mesa {mesa} ocupada com sucesso!{branco}')
         self.exibir(editar=True)
+
     def pedido(self,mesa=-1):
         self.exibir()
         if mesa == -1:
@@ -349,6 +350,7 @@ class mesa:
         c.consultar()
         pedidos = []
         pedido = 1
+        
         while True:
             pedido = input('Digite o pedido da mesa, um item por vez, digite 0 para parar:')
             if pedido == '0':
@@ -361,6 +363,7 @@ class mesa:
                 print()
             self.mesas[escolha-1]['Pedido'] = pedidos
             writedict('mesa.csv',self.mesas,self.fn)
+            
     def mostrar_pedido(self):
         self.exibir()
         mesa = int(input('De qual mesa deseja ver o pedido? '))
@@ -385,6 +388,7 @@ class pagamento:
         with open('estoque.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.estoque.append(i)
+                
     def conta_total(self,mesa=-1):
         self.__init__()
         m.exibir()
@@ -408,10 +412,11 @@ class pagamento:
             acrescimo = input(r'Deseja adicionar os 10% de serviço? s/n')
             if acrescimo == 's':
                 total = round(total*1.1,2)
-            print(f"{'Total (Com acrescimo):':.<30}{verde}R$ {total:>}{branco}")
+            print(f"{'Total (Com acréscimo):':.<30}{verde}R$ {total:>}{branco}")
         pagar = input('Deseja pagar a conta? s/n: ')
         if pagar == 's':
             self.pagamento(mesa)
+
     def pagamento(self,mesa=-1):
         m.exibir()
         if mesa == -1:
@@ -452,6 +457,7 @@ class pagamento:
         print(f'{verde}Pedido pago com sucesso.{branco}')
         m.livrar(mesa-1,False)
         writedict('mesa.csv',self.mesas,self.fn)
+        
     def troco(self,valor,mesa,plural=False):
         if plural == True:
             for i in range(int(self.mesas[mesa-1]['Pessoas'])):

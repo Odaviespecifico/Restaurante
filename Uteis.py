@@ -43,7 +43,7 @@ def mostrar_item(item,editar=False):
         print(f"2 - {azul}Nome do item:{branco} {item['Nome']}")
         print(f"3 - {azul}Quantidade:{branco} {item['Quantidade']}")
         print(f"4 - {azul}Unidade:{branco} {item['Unidade']}")
-        print(f"5 - {azul}preço:{branco} R$ {item['Preço']}")
+        print(f"5 - {azul}Preço:{branco} R$ {item['Preço']}")
         print("6 - ",validade_cor(item['Validade']))
 
 def editou(item):
