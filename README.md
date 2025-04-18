@@ -52,7 +52,7 @@ Utilizamos no projeto as seguintes bibliotecas:
 
 <br>
 
-##### Disciplina: Introdução à Programação, Turma ADS - 2025.1
+##### Disciplina: Fundamentos da Programação, Turma ADS - 2025.1
 - ##### Professor: Humberto Caetano 
   - LinkedIn: [/humberto-caetano-dr-01946731](https://www.linkedin.com/in/humberto-caetano-dr-01946731/)
   - Youtube: [@nemticonto_](https://www.youtube.com/@nemticonto_)
