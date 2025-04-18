@@ -7,18 +7,38 @@ editar = False
 class estoque:
     def __init__(self):
         with open('estoque.csv',encoding='UTF-8') as estoque:
-            self.content = [] # Lista para armazenar o conteúdo do estoque
+            self.itens_estoque = [] # Lista para armazenar o conteúdo do estoque
             for row in csv.DictReader(estoque,delimiter=';'):
-                self.content.append(row)
+                self.itens_estoque.append(row)
         self.fn = ('Código','Nome','Quantidade','Unidade','Preço','Validade')
     def consultar(self):
         global editar
         if editar != True:
             print_ornamentado('Itens no estoque')
-        for i in self.content:
+        for i in self.itens_estoque:
             mostrar_item(i)
         else:
                 print('-'*20)
+        self.mostrar_validade()
+
+    def mostrar_validade(self):
+        vencidos = False
+        for i in self.itens_estoque:
+            validade = i['Validade']
+            ano,dia,mes = int(validade[6:]),int(validade[0:2]),int(validade[3:5])
+            diferenca = (date(ano,mes,dia) - date.today()).days
+            if diferenca < 0:
+                print(f"{i['Nome']} {vermelho}venceu{branco}. A fiscalização pega!")
+                vencidos = True
+            elif diferenca <= 7:
+                print(f"{i['Nome']} está {amarelo}perto de vencer{branco}. Tenha atenção!")
+                vencidos = True
+        else:
+            if vencidos == False:
+                print('Nenhum item crítico de validade. A fiscalização te ama ❤️')
+            print('-'*20)
+        
+
 
     def cadastrar(self):
         print_ornamentado('Cadastrar produto')
@@ -29,10 +49,10 @@ class estoque:
         preco = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
         item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preco,"Validade":validade}
-        self.content.append(item)
+        self.itens_estoque.append(item)
         mostrar_item(item)
         print(verde,'produto cadastrado com sucesso',branco)
-        writedict("estoque.csv",self.content,self.fn)
+        writedict("estoque.csv",self.itens_estoque,self.fn)
 
     def editar(self):
         global editar
@@ -41,7 +61,7 @@ class estoque:
         self.consultar()
         Escolha = input('Digite o código ou nome do item que deseja editar: ').capitalize()
         posicao = 0
-        for i in self.content:
+        for i in self.itens_estoque:
             # print(i)
             if i["Código"] == Escolha or i["Nome"] == Escolha:
                 mostrar_item(i,True)
@@ -49,28 +69,28 @@ class estoque:
                     escolha = input(f"{rosa}Qual parte você quer editar? {branco}")
                     match escolha:
                         case "1":
-                            self.content[posicao]['Código'] = input("Digite o novo código do produto: ")
-                            editou(self.content[posicao])
+                            self.itens_estoque[posicao]['Código'] = input("Digite o novo código do produto: ")
+                            editou(self.itens_estoque[posicao])
                             break
                         case "2":
-                            self.content[posicao]['Nome'] = input("Digite o novo nome do produto: ")
-                            editou(self.content[posicao])
+                            self.itens_estoque[posicao]['Nome'] = input("Digite o novo nome do produto: ")
+                            editou(self.itens_estoque[posicao])
                             break
                         case "3":
-                            self.content[posicao]['Quantidade'] = input("Digite a nova quantidade do produto: ")
-                            editou(self.content[posicao])
+                            self.itens_estoque[posicao]['Quantidade'] = input("Digite a nova quantidade do produto: ")
+                            editou(self.itens_estoque[posicao])
                             break
                         case "4":
-                            self.content[posicao]['Unidade'] = input("Digite a nova unidade do produto: ")
-                            editou(self.content[posicao])
+                            self.itens_estoque[posicao]['Unidade'] = input("Digite a nova unidade do produto: ")
+                            editou(self.itens_estoque[posicao])
                             break
                         case "5":
-                            self.content[posicao]['Preço'] = input("Digite o novo preço do produto: ")
-                            editou(self.content[posicao])
+                            self.itens_estoque[posicao]['Preço'] = input("Digite o novo preço do produto: ")
+                            editou(self.itens_estoque[posicao])
                             break
                         case "6":
-                            self.content[posicao]['Validade'] = input("Digite a nova validade do produto: ")
-                            editou(self.content[posicao])
+                            self.itens_estoque[posicao]['Validade'] = input("Digite a nova validade do produto: ")
+                            editou(self.itens_estoque[posicao])
                             break
                         case _:
                             print(f'{vermelho}Opção inválida{branco}')
@@ -83,7 +103,7 @@ class estoque:
             if posicao > 0:
                 print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
-        writedict("estoque.csv",self.content,self.fn)
+        writedict("estoque.csv",self.itens_estoque,self.fn)
         
     def remover(self):
         print_ornamentado('Remover produto')
@@ -92,12 +112,12 @@ class estoque:
         self.consultar()
         Escolha = input('Digite o código ou nome do item que deseja remover: ')
         posição = 0
-        for i in self.content:
+        for i in self.itens_estoque:
             if i["Código"] == Escolha or i["Nome"] == Escolha:
                 mostrar_item(i)
                 confirma = input(f'{vermelho}Você tem certeza que deseja remover o item {i["Nome"]}?\nDigite "s" para sim ou "n" para não: {branco}')
                 if confirma == 's':
-                    self.content.pop(posição)
+                    self.itens_estoque.pop(posição)
                     print(f'{vermelho}Produto removido com sucesso!{branco}')
                 else:
                     print(f'{verde}Produto não removido!{branco}')
@@ -107,7 +127,7 @@ class estoque:
         else:
             print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
 
-        writedict("estoque.csv",self.content,self.fn)
+        writedict("estoque.csv",self.itens_estoque,self.fn)
                         
 class cardapio:
     def __init__(self):
@@ -563,10 +583,11 @@ class pagamento:
                 print(f'{vermelho}O cliente não pagou o suficiente{branco}')
                 print(f'Ele ainda deve pagar {vermelho}R$ {valor - pago}{branco}')
 
+e = estoque()
 c = cardapio()
 m = mesa()
 p = pagamento()
 
 if __name__ == "__main__":
-    #m.apagar_pedido(13)
+    e.consultar()
     pass

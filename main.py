@@ -6,7 +6,7 @@ c = cardapio()
 m = mesa()
 p = pagamento()
 print_ornamentado('Gerenciamento de restaurantes')
-while True:
+while True: #Menu
     print(opcoes_geral)
     op = input("Digite a opção desejada: ")
     match op:
