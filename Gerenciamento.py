@@ -422,7 +422,7 @@ class mesa:
             suficiente = True  # Variável para verificar se todos os ingredientes estão disponíveis
             for ingrediente in ingredientes:
                 # Verifica se o ingrediente está presente no cardápio
-                if ingrediente[0] in self.cardapio[int(pedido)-1]['Ingredientes']:
+                if ingrediente[0].upper() in self.cardapio[int(pedido)-1]['Ingredientes'].upper():
                     for i in self.estoque:
                         if i['Nome'] == ingrediente[0]:  # Verifica se o ingrediente está no estoque
                             # Verifica se a quantidade disponível no estoque é suficiente
@@ -431,7 +431,7 @@ class mesa:
                                 suficiente = False  # Marca que não há ingredientes suficientes
                             else:
                                 # Atualiza a quantidade do ingrediente no estoque
-                                i['Quantidade'] = str(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.')))
+                                i['Quantidade'] = str(round(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.')),5))
                                 itens_remover.append(i)  # Adiciona o item atualizado à lista de itens a serem removidos
             # Atualiza o estoque com os itens removidos
             if suficiente == True: #se temos todos os ingredientes

@@ -2,7 +2,7 @@ Código;Nome;Quantidade;Unidade;Preço;Validade;Quantidade mínima
 0001;Pão com gergelim;0.0;unidades;0,40;02/04/2025;100
 0002;Pão sem gergelim;9.0;unidades;0,35;05/04/2025;100
 0003;Coca-cola;900;litros;0,03;09/09/2029;500
-0004;Batata;8;Kg;5,00;19/04/2025;15
+0004;Batata;5.75;Kg;5,00;19/04/2025;15
 0005;Hambúrguer simples;0;unidades;1,50;12/05/2025;200
 0006;Ketchup (Litros);4;litros;0,50;09/07/2025;10
 0007;Alface;5.940000000000001;folhas;1,50;08/04/2026;300
