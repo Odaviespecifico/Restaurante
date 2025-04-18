@@ -431,7 +431,7 @@ class mesa:
                                 suficiente = False  # Marca que não há ingredientes suficientes
                             else:
                                 # Atualiza a quantidade do ingrediente no estoque
-                                i['Quantidade'] = str(round(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.')),5))
+                                i['Quantidade'] = str(round(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.'))))
                                 itens_remover.append(i)  # Adiciona o item atualizado à lista de itens a serem removidos
             # Atualiza o estoque com os itens removidos
             if suficiente == True: #se temos todos os ingredientes
