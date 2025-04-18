@@ -3,6 +3,7 @@ from Uteis import *
 import csv
 import random
 editar = False
+
 class estoque:
     def __init__(self):
         with open('estoque.csv',encoding='UTF-8') as estoque:
@@ -110,15 +111,16 @@ class estoque:
                         
 class cardapio:
     def __init__(self):
-        self.cardapio = []
-        self.estoque = []
+        self.cardapio = [] #O nosso cardápio
+        self.estoque = [] #O nosso estoque
         with open("cardápio.csv",encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.cardapio.append(i)
         with open('estoque.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.estoque.append(i)
-        self.fn = ('Nome','Preço','Descrição','Ingredientes')
+        
+        self.fn = ('Nome','Preço','Descrição','Ingredientes') #Fieldnames do item
     def consultar(self):
         print_ornamentado('Itens no cardápio')
         c = 1
@@ -268,8 +270,14 @@ class mesa:
             for i in csv.DictReader(items,delimiter=';'):
                 self.mesas.append(i)
         self.fn = ('Número','Capacidade','Status','Pessoas','Pedido')
+
+        self.pedidos = [] #Nossos pedidos. Armazenados de acordo com o self.fnp
+        with open('pedido.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.pedidos.append(i)
+        self.fnp = ('Mesa','Horário','Status','Itens') #Fieldnames do pedido
         
-        # Status -> 0 = livre 1 = reservada 2 = ocupada
+        # Status -> 0 = Registrado | 1 = fazendo | 2 = Feito
         
     def exibir(self,colunas=5,editar=False):
         self.__init__()
@@ -285,7 +293,7 @@ class mesa:
             if (i+1) % colunas == 0 and i != 0:
                 print()
 
-    def cadatrar(self):
+    def cadastrar(self):
         self.exibir(editar=True)
         print_ornamentado('Cadastrar mesa')
         numero = input("Digite o número da mesa: ")
@@ -302,6 +310,7 @@ class mesa:
         self.mesas[mesa-1]['Status'] = 0
         self.mesas[mesa-1]['Pessoas'] = 0
         self.mesas[mesa-1]['Pedido'] = []
+        m.apagar_pedido(mesa)
         writedict("mesa.csv",self.mesas,self.fn)
         print(f'{verde}Mesa {mesa+1} liberada com sucesso!{branco}')
 
@@ -334,12 +343,14 @@ class mesa:
         print(f'{verde}Mesa {mesa} ocupada com sucesso!{branco}')
         self.exibir(editar=True)
 
-    def pedido(self,mesa=-1):
-        self.exibir()
+    def pedido(self,mesa=-1,exibir=True):
+        if exibir:
+            self.exibir()
         if mesa == -1:
             escolha = int(input('De qual mesa é o pedido? '))
         else:
             escolha = mesa
+
         if self.mesas[escolha-1]['Status'] == '0':
             op = input(f'A mesa {azul}{escolha}{branco} não tem clientes cadastrados, deseja adicionar um cliente? s/n: ')
             if op == 's':
@@ -347,6 +358,11 @@ class mesa:
             else:
                 c.consultar()
                 pass
+        if self.pedidos == []: #Verifica se é o primeiro pedido
+            print('Primeiro pedido do dia!')
+            self.pedidos.append({'Mesa':escolha-1,'Horário':datetime.datetime.now(),'Status':'Registrado','Itens':[]})
+        else:
+            self.pedidos.append({'Mesa':escolha-1,'Horário':datetime.datetime.now(),'Status':'Registrado','Itens':[]})
         c.consultar()
         pedidos = []
         pedido = 1
@@ -356,29 +372,90 @@ class mesa:
             if pedido == '0':
                 break
             pedidos.append(int(pedido)-1)
-            print(f'{azul}Pedido da mesa {escolha-1}:{branco}',end=' ')
+            print(f'{azul}Pedido da mesa {escolha}:{branco}',end=' ')
             for i in range(len(pedidos)):
-                print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}",end=', ')
+                print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}",end=', ') #Adicionar handling de erro
             else:
                 print()
             self.mesas[escolha-1]['Pedido'] = pedidos
+
             writedict('mesa.csv',self.mesas,self.fn)
-            
-    def mostrar_pedido(self):
-        self.exibir()
-        mesa = int(input('De qual mesa deseja ver o pedido? '))
+            self.pedidos[-1]['Itens'] = pedidos
+        writedict('pedido.csv',self.pedidos,self.fnp)
+
+
+    def mostrar_pedido(self,mesa=-1):
+        if mesa == -1:
+            self.exibir()
+            mesa = int(input('De qual mesa deseja ver o pedido? '))
         print(f'{azul}Pedido da mesa {mesa}:{branco}',end=' ')
         for i in eval(self.mesas[mesa-1]['Pedido']):
             print(c.cardapio[i]['Nome'],end=', ')
         else:
             print()
 
+    def fila_de_pedidos(self):
+        print_ornamentado('Fila de pedidos:')
+        for i in self.pedidos:
+            print(azul,end='')
+            print('-'*20)
+            print(branco,end='')
+            print(f'{rosa}Número de pedido{branco}: {self.pedidos.index(i)+1}')
+            print(f"{rosa}Pedido da mesa{branco} {verde}{int(i['Mesa'])+1}{branco}")
+            print(f'{rosa}Itens do pedido: {branco}',end='')
+            for j in eval(self.mesas[int(i['Mesa'])]['Pedido']):
+                print(c.cardapio[j]['Nome'],end=', ')
+            else:
+                print()
+            print(f"{rosa}Status do pedido: {branco} {i['Status']}")
+            print(f"{rosa}Dia e horário do pedido: {branco}{i['Horário'][:-7]}")
+        else:
+            print(azul,end='')
+            print('-'*20)
+            print(branco,end='')
+
+    def status_pedido(self,mesa):
+        while True:
+            try:
+                status = int(input("""Qual status deseja colocar? 
+1 - Registrado
+2 - Em preparo
+3 - Concluido
+4 - Entregue"""))
+                break
+            except ValueError:
+                print(f'{vermelho}Opção inválida{branco}')
+        match status:
+            case 1:
+                status = 'Recebido'
+            case 2:
+                status = 'Em preparo'
+            case 3:
+                status = 'Concluido'
+            case 4:
+                status = 'Entregue'
+        self.pedidos[mesa-1]['Status'] = status
+    
+    def apagar_pedido(self,mesa=float('inf'),index=False): #Apaga o pedido da mesa pelo número da mesa (Do restaurante, não da lista)
+        if index:
+            pedido_apagar = int(input('Qual o número do pedido que você deseja apagar?'))
+            self.pedidos.pop(pedido_apagar-1)
+        if mesa == float('inf') and index == False:
+            print(mesa)
+            mesa = int(input('Digite a mesa que deseja apagar o pedido.'))
+        for pedido in self.pedidos:
+            if int(pedido['Mesa']) == int(mesa)-1:
+                self.pedidos.pop(self.pedidos.index(pedido))
+        writedict('pedido.csv',self.pedidos,self.fnp)
+
 class pagamento:
     def __init__(self):
         self.mesas = []
         self.cardápio = []
         self.estoque = []
+        self.pedidos = []
         self.fn = ["Número","Capacidade","Status","Pessoas","Pedido"]
+        self.fnp = ('Mesa','Horário','Status','Itens')
         with open('mesa.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.mesas.append(i)
@@ -388,6 +465,9 @@ class pagamento:
         with open('estoque.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.estoque.append(i)
+        with open('pedido.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.pedidos.append(i)
                 
     def conta_total(self,mesa=-1):
         self.__init__()
@@ -447,16 +527,18 @@ class pagamento:
         else:
             op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d:')
             if op2 == 'd':
-                self.troco(valor_de_cada,mesa,False)
+                self.troco(total,mesa,False)
             if op2 == 'p':
-                input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada}{branco} do cliente. Precione enter quando o pagamento for feito')
+                input(f'Aproxime a maquininha e cobre R${verde}{total}{branco} do cliente. Precione enter quando o pagamento for feito')
                     
         self.mesas[mesa-1]['Status'] = 0
         self.mesas[mesa-1]['Pessoas'] = 0
         self.mesas[mesa-1]['Pedido'] = []
+        m.apagar_pedido(mesa)
         print(f'{verde}Pedido pago com sucesso.{branco}')
         m.livrar(mesa-1,False)
         writedict('mesa.csv',self.mesas,self.fn)
+        writedict('pedido.csv',self.pedidos,self.fnp)
         
     def troco(self,valor,mesa,plural=False):
         if plural == True:
@@ -484,5 +566,7 @@ class pagamento:
 c = cardapio()
 m = mesa()
 p = pagamento()
-if __name__ == '__main__':
-    p.pagamento()
+
+if __name__ == "__main__":
+    #m.apagar_pedido(13)
+    pass

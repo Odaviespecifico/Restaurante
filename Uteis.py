@@ -76,9 +76,10 @@ def disponiveis(itens,ingredientes):
 opcoes_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha
-\033[35m3\033[37m - Mesas e Pedidos
-\033[35m4\033[37m - Pagamento
-\033[35m5\033[37m - sair"""
+\033[35m3\033[37m - Mesas
+\033[35m4\033[37m - Pedidos
+\033[35m5\033[37m - Pagamento
+\033[35m6\033[37m - sair"""
 
 opcoes_estoque = """Opções:
 \033[35m1\033[37m - Consultar estoque
@@ -96,12 +97,17 @@ opcoes_cardapio = """Opções:
 
 opcoes_mesa = """Opções:
 \033[35m1\033[37m - Mostrar mesas
-\033[35m2\033[37m - Adicionar mesa
-\033[35m3\033[37m - Adicionar pedido
-\033[35m4\033[37m - Mostrar pedido
-\033[35m5\033[37m - Ocupar mesa reservada
-\033[35m6\033[37m - Liberar todas as mesas
-\033[35m7\033[37m - voltar ao menu principal"""
+\033[35m2\033[37m - Cadastrar mesa
+\033[35m3\033[37m - Ocupar mesa reservada
+\033[35m4\033[37m - Liberar todas as mesas
+\033[35m5\033[37m - voltar ao menu principal"""
+
+opcoes_pedido = """Opções:
+\033[35m1\033[37m - Adicionar pedido
+\033[35m2\033[37m - Mostrar pedidos
+\033[35m3\033[37m - Alterar pedido
+\033[35m4\033[37m - Alterar status do pedido
+\033[35m5\033[37m - voltar ao menu principal"""
 
 opcoes_pagamento = """Opções:
 \033[35m1\033[37m - Mostrar conta
