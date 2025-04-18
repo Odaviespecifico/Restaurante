@@ -672,14 +672,12 @@ class relatorio:
             self.Vendas += 1
             self.Valor_total += float(pagamento['Valor'])
         if mostrar == True:
-            print(f"Foram feitas {self.Vendas} vendas hoje. O valor total arrecadado foi de R${self.Valor_total:.2f}")
-        return self.Vendas,self.Valor_total
-
-    def media(self):
-        self.Vendas,self.Valor_total = self.total(False)
+            print_ornamentado('Relatório de vendas')
+            print(f"Foram feitas {self.Vendas} vendas hoje. O valor total arrecadado foi de R${verde}{self.Valor_total:.2f}{branco}")
         media_mesa = round(self.Valor_total/len(self.mesas),2)
-        print(f"A média de valor dentre as {len(self.mesa)} é de R$ {self.Valor_total:.2f}")
-    
+        print(f"A média de valor dentre as {azul}{len(self.mesas)}{branco} mesas é de R${verde}{self.Valor_total/len(self.mesas):.2f}{branco}")
+        return self.Vendas,self.Valor_total
+        
     def mais_vendidos(self):
         print_ornamentado('Mais vendidos')
         vendidos = []
@@ -695,7 +693,7 @@ class relatorio:
         for i in itens: 
             vendidos_ordenado.append((i,vendidos.count(i))) #Coloca em vendidos uma tupla para cada item com ele e sua quantidade
         vendidos_ordenado.sort(key=lambda x: x[1],reverse=True)
-        
+
         #Verificar cada primeiro item das tuplas e associar com o cardápio
         for i in vendidos_ordenado:
             item_atual = self.cardapio[i[0]-1]

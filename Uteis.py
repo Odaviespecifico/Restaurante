@@ -83,7 +83,14 @@ opcoes_geral = """Opções:
 \033[35m3\033[37m - Mesas
 \033[35m4\033[37m - Pedidos
 \033[35m5\033[37m - Pagamento
-\033[35m6\033[37m - sair"""
+\033[35m6\033[37m - Relatório
+\033[35m7\033[37m - sair"""
+
+opcoes_relatorio = """Opções:
+\033[35m1\033[37m - Relatório geral
+\033[35m2\033[37m - Total de vendas e média por mesa
+\033[35m3\033[37m - Produtos mais vendidos
+\033[35m4\033[37m - Sair"""
 
 opcoes_estoque = """Opções:
 \033[35m1\033[37m - Consultar estoque
