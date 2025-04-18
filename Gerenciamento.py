@@ -20,6 +20,7 @@ class estoque:
         else:
                 print('-'*20)
         self.mostrar_validade()
+        self.estoque_baixo()
 
     def mostrar_validade(self):
         vencidos = False
@@ -39,7 +40,13 @@ class estoque:
             print('-'*20)
     
     def estoque_baixo(self):
-        pass
+        for i in self.itens_estoque:
+            if float(i['Quantidade']) > float(i['Quantidade mínima']):
+                pass
+            elif float(i['Quantidade']) <= float(i['Quantidade mínima']):
+                print(f"Quantidade baixa de {vermelho}{i['Nome']}{branco}. Você tem {azul}{i['Quantidade']} {i['Unidade']}{branco} e seu ponto crítico é {azul}{i['Quantidade mínima']} {i['Unidade']}{branco}")
+        else:
+            print('-'*20)
 
     def cadastrar(self):
         print_ornamentado('Cadastrar produto')
@@ -49,7 +56,8 @@ class estoque:
         unidade = input("Digite a unidade de medida do produto: ")
         preco = input("Digite o preço do produto: ")
         validade = input("Digite a validade do produto: ")
-        item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preco,"Validade":validade}
+        q_minima = input(f'Digite a quantidade mínima do item: (Não esqueça que a unidade é {unidade})')
+        item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preco,"Validade":validade,'Quantidade mínima':q_minima}
         self.itens_estoque.append(item)
         mostrar_item(item)
         print(verde,'produto cadastrado com sucesso',branco)
@@ -91,6 +99,10 @@ class estoque:
                             break
                         case "6":
                             self.itens_estoque[posicao]['Validade'] = input("Digite a nova validade do produto: ")
+                            editou(self.itens_estoque[posicao])
+                            break
+                        case "7":
+                            self.itens_estoque[posicao]['Quantidade mínima'] = input("Digite a nova quantidade mínima do produto: ")
                             editou(self.itens_estoque[posicao])
                             break
                         case _:

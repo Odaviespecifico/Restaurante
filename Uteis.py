@@ -29,12 +29,15 @@ def validade_cor(validade):
     else:
         return f"{azul}Validade:{branco} {vermelho}{validade}{branco}"
 
-def mostrar_item(item,editar=False):
+def mostrar_item(item,editar=False,):
     if not editar:
         print('-'*20)
         print(f"{azul}Código do item:{branco} {item['Código']}")
         print(f"{azul}Nome do item:{branco} {item['Nome']}")
-        print(f"{azul}Quantidade:{branco} {item['Quantidade']} {item['Unidade']}")
+        if float(item['Quantidade']) <= float(item['Quantidade mínima']):
+            print(f"{azul}Quantidade:{branco} {vermelho}{item['Quantidade']} {item['Unidade']}{branco}")
+        else:
+            print(f"{azul}Quantidade:{branco} {item['Quantidade']} {item['Unidade']}")
         print(f"{azul}preço:{branco} R$ {item['Preço']}")
         print(validade_cor(item['Validade']))
     else:
@@ -45,6 +48,7 @@ def mostrar_item(item,editar=False):
         print(f"4 - {azul}Unidade:{branco} {item['Unidade']}")
         print(f"5 - {azul}Preço:{branco} R$ {item['Preço']}")
         print("6 - ",validade_cor(item['Validade']))
+        print(f"7 - {azul}Quantidade Mínima:{branco} R$ {item['Preço']}")
 
 def editou(item):
     editar = False
