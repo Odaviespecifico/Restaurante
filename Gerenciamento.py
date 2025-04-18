@@ -313,6 +313,15 @@ class mesa:
                 self.pedidos.append(i)
         self.fnp = ('Mesa','Horário','Status','Itens') #Fieldnames do pedido
         
+        self.estoque = []
+        with open('estoque.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.estoque.append(i)
+        self.fn_estoque = ('Código','Nome','Quantidade','Unidade','Preço','Validade','Quantidade mínima')
+        self.cardapio = []
+        with open('cardápio.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.cardapio.append(i)
         # Status -> 0 = Registrado | 1 = fazendo | 2 = Feito
         
     def exibir(self,colunas=5,editar=False):
@@ -387,7 +396,7 @@ class mesa:
         else:
             escolha = mesa
 
-        if self.mesas[escolha-1]['Status'] == '0':
+        if self.mesas[escolha-1]['Status'] == '0': #Se a mesa está sem clientes
             op = input(f'A mesa {azul}{escolha}{branco} não tem clientes cadastrados, deseja adicionar um cliente? s/n: ')
             if op == 's':
                 self.ocupar(escolha)
@@ -403,21 +412,46 @@ class mesa:
         pedidos = []
         pedido = 1
         
-        while True:
+        while True: #Loop de adicionar pedido
             pedido = input('Digite o pedido da mesa, um item por vez, digite 0 para parar:')
             if pedido == '0':
                 break
-            pedidos.append(int(pedido)-1)
-            print(f'{azul}Pedido da mesa {escolha}:{branco}',end=' ')
-            for i in range(len(pedidos)):
-                print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}",end=', ') #Adicionar handling de erro
-            else:
-                print()
-            self.mesas[escolha-1]['Pedido'] = pedidos
-
-            writedict('mesa.csv',self.mesas,self.fn)
-            self.pedidos[-1]['Itens'] = pedidos
-        writedict('pedido.csv',self.pedidos,self.fnp)
+            # Verificar se o item está presente no estoque
+            ingredientes = eval(self.cardapio[int(pedido)-1]['Ingredientes'])  # Obtém os ingredientes do item do cardápio
+            itens_remover = []  # Lista para armazenar os itens que serão removidos do estoque
+            suficiente = True  # Variável para verificar se todos os ingredientes estão disponíveis
+            for ingrediente in ingredientes:
+                # Verifica se o ingrediente está presente no cardápio
+                if ingrediente[0] in self.cardapio[int(pedido)-1]['Ingredientes']:
+                    for i in self.estoque:
+                        if i['Nome'] == ingrediente[0]:  # Verifica se o ingrediente está no estoque
+                            # Verifica se a quantidade disponível no estoque é suficiente
+                            if float(i['Quantidade']) < float(ingrediente[1].replace(',', '.')):
+                                print(f'{vermelho}Não temos {ingrediente[0]} suficiente no estoque!{branco}')
+                                suficiente = False  # Marca que não há ingredientes suficientes
+                            else:
+                                # Atualiza a quantidade do ingrediente no estoque
+                                i['Quantidade'] = str(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.')))
+                                itens_remover.append(i)  # Adiciona o item atualizado à lista de itens a serem removidos
+            # Atualiza o estoque com os itens removidos
+            if suficiente == True: #se temos todos os ingredientes
+                for i in itens_remover: #Loop para remover os itens
+                    for j in self.estoque:
+                        if i['Nome'] == j['Nome']:
+                            self.estoque[self.estoque.index(j)] = i
+                writedict('estoque.csv', self.estoque, self.fn_estoque)  # Salva as alterações no arquivo de estoque
+                pedidos.append(int(pedido)-1)  # Adiciona o pedido à lista de pedidos
+                print(f'{azul}Pedido da mesa {escolha}:{branco}', end=' ')
+                for i in range(len(pedidos)):
+                    # Exibe os nomes dos itens do pedido
+                    print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}", end=', ')  # Adicionar handling de erro
+                else:
+                    print()
+                # Atualiza o pedido da mesa e o registro de pedidos
+                self.mesas[escolha-1]['Pedido'] = pedidos
+                self.pedidos[-1]['Itens'] = pedidos
+                writedict('mesa.csv', self.mesas, self.fn)  # Salva as alterações no arquivo de mesas
+        writedict('pedido.csv', self.pedidos, self.fnp)  # Salva as alterações no arquivo de pedidos
 
     def mostrar_pedido(self,mesa=-1):
         if mesa == -1:
@@ -605,5 +639,5 @@ m = mesa()
 p = pagamento()
 
 if __name__ == "__main__":
-    e.consultar()
+    m.pedido()
     pass
