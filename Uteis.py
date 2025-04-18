@@ -29,12 +29,15 @@ def validade_cor(validade):
     else:
         return f"{azul}Validade:{branco} {vermelho}{validade}{branco}"
 
-def mostrar_item(item,editar=False):
+def mostrar_item(item,editar=False,):
     if not editar:
         print('-'*20)
         print(f"{azul}Código do item:{branco} {item['Código']}")
         print(f"{azul}Nome do item:{branco} {item['Nome']}")
-        print(f"{azul}Quantidade:{branco} {item['Quantidade']} {item['Unidade']}")
+        if float(item['Quantidade']) <= float(item['Quantidade mínima']):
+            print(f"{azul}Quantidade:{branco} {vermelho}{item['Quantidade']} {item['Unidade']}{branco}")
+        else:
+            print(f"{azul}Quantidade:{branco} {item['Quantidade']} {item['Unidade']}")
         print(f"{azul}preço:{branco} R$ {item['Preço']}")
         print(validade_cor(item['Validade']))
     else:
@@ -45,13 +48,14 @@ def mostrar_item(item,editar=False):
         print(f"4 - {azul}Unidade:{branco} {item['Unidade']}")
         print(f"5 - {azul}Preço:{branco} R$ {item['Preço']}")
         print("6 - ",validade_cor(item['Validade']))
+        print(f"7 - {azul}Quantidade Mínima:{branco} R$ {item['Preço']}")
 
 def editou(item):
     editar = False
     mostrar_item(item)
     print(f'{verde}Produto alterado com sucesso!{branco}')
 
-def writedict(file,data,fn):
+def writedict(file,data,fn): #Escreve dicionário
     with open(str(file),"w",encoding="UTF-8",newline="") as estoque:
         writer = csv.DictWriter(estoque, fieldnames=fn, delimiter=';')
         writer.writeheader()
@@ -76,9 +80,10 @@ def disponiveis(itens,ingredientes):
 opcoes_geral = """Opções:
 \033[35m1\033[37m - Estoque
 \033[35m2\033[37m - Cozinha
-\033[35m3\033[37m - Mesas e Pedidos
-\033[35m4\033[37m - Pagamento
-\033[35m5\033[37m - sair"""
+\033[35m3\033[37m - Mesas
+\033[35m4\033[37m - Pedidos
+\033[35m5\033[37m - Pagamento
+\033[35m6\033[37m - sair"""
 
 opcoes_estoque = """Opções:
 \033[35m1\033[37m - Consultar estoque
@@ -96,12 +101,17 @@ opcoes_cardapio = """Opções:
 
 opcoes_mesa = """Opções:
 \033[35m1\033[37m - Mostrar mesas
-\033[35m2\033[37m - Adicionar mesa
-\033[35m3\033[37m - Adicionar pedido
-\033[35m4\033[37m - Mostrar pedido
-\033[35m5\033[37m - Ocupar mesa reservada
-\033[35m6\033[37m - Liberar todas as mesas
-\033[35m7\033[37m - voltar ao menu principal"""
+\033[35m2\033[37m - Cadastrar mesa
+\033[35m3\033[37m - Ocupar mesa
+\033[35m4\033[37m - Liberar todas as mesas
+\033[35m5\033[37m - voltar ao menu principal"""
+
+opcoes_pedido = """Opções:
+\033[35m1\033[37m - Adicionar pedido
+\033[35m2\033[37m - Mostrar pedidos
+\033[35m3\033[37m - Alterar pedido
+\033[35m4\033[37m - Alterar status do pedido
+\033[35m5\033[37m - voltar ao menu principal"""
 
 opcoes_pagamento = """Opções:
 \033[35m1\033[37m - Mostrar conta

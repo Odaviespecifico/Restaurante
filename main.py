@@ -6,11 +6,11 @@ c = cardapio()
 m = mesa()
 p = pagamento()
 print_ornamentado('Gerenciamento de restaurantes')
-while True:
+while True: #Menu
     print(opcoes_geral)
     op = input("Digite a opção desejada: ")
     match op:
-        case '1':
+        case '1': #Estroque
             print_ornamentado('Estoque')
             while True:
                 print(opcoes_estoque)
@@ -30,7 +30,7 @@ while True:
                         print(f'{vermelho}Opção inválida{branco}')
                         continue
             print_ornamentado("Menu principal")
-        case '2':
+        case '2': #Cozinha
             print_ornamentado('Cozinha')
             while True:
                 print(opcoes_cardapio)
@@ -48,7 +48,7 @@ while True:
                         break
                     case _:
                         print(f"{vermelho}Opção inválida{branco}")
-        case '3':
+        case '3': #Mesas
             print_ornamentado("Mesas e pedidos")
             while True:
                 print(opcoes_mesa)
@@ -57,21 +57,43 @@ while True:
                     case '1':
                         m.exibir()
                     case '2':
-                        m.cadatrar()
+                        m.cadastrar()
                     case '3':
-                        m.pedido()
-                    case '4':
-                        m.mostrar_pedido()
-                    case '5':
                         m.ocupar()
-                    case '6':
+                    case '4':
                         for i in range(len(m.mesas)):
                             m.livrar(i-1,False)
-                    case '7':
+                    case '5':
+                        break
+                        
+                    case _:
+                        print(f"{vermelho}Opção inválida{branco}")
+        case '4': #Pedidos
+            while True:
+                print(opcoes_pedido)
+                op = input("Digite a opção desejada: ")
+                match op:
+                    case '1':
+                        m.exibir()
+                        mesa = int(input('Qual mesa você deseja alterar o pedido? '))
+                        m.mostrar_pedido(mesa)
+                        m.pedido(mesa,False)
+                    case '2':
+                        m.fila_de_pedidos()
+                    case '3': #TBWW
+                        m.fila_de_pedidos()
+                        pedido = int(input('Qual a mesa do pedido você quer alterar? '))
+                        m.pedido
+                    case '4':
+                        m.exibir()
+                        mesa = int(input('Qual mesa você deseja alterar o status pedido? '))
+                        m.mostrar_pedido(mesa)
+                        m.status_pedido(mesa)
+                    case '5':
                         break
                     case _:
                         print(f"{vermelho}Opção inválida{branco}")
-        case '4':
+        case '5': #Pagamento
             print_ornamentado('Pagamento')
             while True:
                 print(opcoes_pagamento)
@@ -85,7 +107,7 @@ while True:
                         break
                     case _:
                         print(f'{vermelho}Opção inválida{branco}')
-        case '5':
+        case '6': #Sair
             break
         case _:
             print(f"{vermelho}Opção inválida{branco}")
