@@ -529,7 +529,7 @@ class pagamento:
         self.pago = False
         self.fn = ["Número","Capacidade","Status","Pessoas","Pedido"]
         self.fnp = ('Mesa','Horário','Status','Itens')
-        self.fn_pagamentos = ('Mesa','Horário','Itens','Valor')
+        self.fn_pagamentos = ('Mesa','Horário','Itens','Valor','Meio')
         with open('mesa.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.mesas.append(i)
@@ -565,7 +565,7 @@ class pagamento:
                 print(f"{self.cardápio[int(i)-1]['Nome']:.<30}R$ {self.cardápio[int(i)-1]['Preço']:>}")
                 total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
             print(f"{'Total:':.<30}{verde}R$ {total:>}{branco}") #how to format to :.2f?
-            acrescimo = input(r'Deseja adicionar os 10% de serviço? s/n')
+            acrescimo = input(r'Deseja adicionar os 10% de serviço? s/n: ')
             if acrescimo == 's':
                 total = round(total*1.1,2)
             print(f"{'Total (Com acréscimo):':.<30}{verde}R$ {total:>}{branco}") #how to format to :.2f?
@@ -596,21 +596,25 @@ class pagamento:
         valor_de_cada = (total/int(pessoa))
         if op == 's':
             print(f'Temos {azul}{pessoa}{branco} pessoas na mesa. O valor por pessoa fica R${verde}{valor_de_cada:.2f}{branco}')
-            op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d: ')
+            op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? c/d: ')
             if op2 == 'd':
                 self.troco(valor_de_cada,mesa,True)
-            if op2 == 'p':
+                meio = 'Dinheiro/pix'
+            if op2 == 'c':
                 for i in range(int(self.mesas[mesa-1]['Pessoas'])):
                     input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada:.2f}{branco} da pessoa {azul}{i+1}{branco}. Pressione enter quando o pagamento for feito')
+                meio = 'Cartão'
         else:
-            op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d:')
-            if op2 == 'd': # Opção pagamento em dinheiro
+            op2 = input('O pagamento vai ser em dinheiro/pix ou cartão? c/d:')
+            if op2 == 'd': # Opção pagamento em dinheiro/pix
                 self.troco(total,mesa,False)
-            if op2 == 'p': # Opção pagamento em pix/cartão
+                meio = 'Dinheiro/pix'
+            if op2 == 'c': # Opção pagamento em cartão
                 input(f'Aproxime a maquininha e cobre R${verde}{total:.2f}{branco} do cliente. Pressione enter quando o pagamento for feito')
+                meio = 'Cartão'
         for pedido in self.pedidos:
             if int(pedido['Mesa']) == int(mesa)-1:
-                self.pagamentos.append({'Mesa':pedido['Mesa'],'Horário':pedido['Horário'],'Itens':pedido['Itens'],'Valor':total})
+                self.pagamentos.append({'Mesa':pedido['Mesa'],'Horário':pedido['Horário'],'Itens':pedido['Itens'],'Valor':total,'Meio':meio})
                 self.pagamentos[-1]['Valor'] = total
         writedict('pagamentos.csv',self.pagamentos,self.fn_pagamentos)
         self.mesas[mesa-1]['Status'] = 0
@@ -633,8 +637,8 @@ class pagamento:
                 if pago == valor:
                     print('Você não precisa dar troco.')
                 if pago < valor:
-                    print(f'{vermelho}O cliente não pagou o suficiente{branco}')
-                    print(f'Ele ainda deve pagar {vermelho}R$ {(valor - pago):.2f}{branco}')
+                    print(f'{vermelho}O cliente não pagou o suficiente!{branco}')
+                    print(f'Falta pagar {vermelho}R$ {(valor - pago):.2f}{branco}')
         if plural == False:
             print(f'Cobre {verde}R${valor:.2f}{branco} do cliente.')
             pago = float(input('Quanto foi pago? R$'))
@@ -646,11 +650,63 @@ class pagamento:
                 print(f'{vermelho}O cliente não pagou o suficiente{branco}')
                 print(f'Ele ainda deve pagar {vermelho}R$ {(valor - pago):.2f}{branco}')
 
+class relatorio:
+    def __init__(self):
+        self.pagamentos = []
+        with open('pagamentos.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.pagamentos.append(i)
+        self.cardapio = []
+        with open('cardápio.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.cardapio.append(i)
+        self.mesas = []
+        with open('mesa.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.mesas.append(i)
+
+    def total(self,mostrar=True):
+        self.Vendas = 0
+        self.Valor_total = 0.0
+        for pagamento in self.pagamentos:
+            self.Vendas += 1
+            self.Valor_total += float(pagamento['Valor'])
+        if mostrar == True:
+            print_ornamentado('Relatório de vendas')
+            print(f"Foram feitas {self.Vendas} vendas hoje. O valor total arrecadado foi de R${verde}{self.Valor_total:.2f}{branco}")
+        media_mesa = round(self.Valor_total/len(self.mesas),2)
+        print(f"A média de valor dentre as {azul}{len(self.mesas)}{branco} mesas é de R${verde}{self.Valor_total/len(self.mesas):.2f}{branco}")
+        return self.Vendas,self.Valor_total
+        
+    def mais_vendidos(self):
+        print_ornamentado('Mais vendidos')
+        vendidos = []
+
+        #Ler todos os itens dos pedidos e colocar todos em uma lista. 
+        for pedidos in self.pagamentos:
+            for i in eval(pedidos['Itens']):
+                vendidos.append(i) 
+
+        #Contar os valores individuais da lista para gerar uma lista com tuplas de pares Valor
+        itens = set(vendidos) #Tranformar em conjunto para pegar os itens individuais
+        vendidos_ordenado = []
+        for i in itens: 
+            vendidos_ordenado.append((i,vendidos.count(i))) #Coloca em vendidos uma tupla para cada item com ele e sua quantidade
+        vendidos_ordenado.sort(key=lambda x: x[1],reverse=True)
+
+        #Verificar cada primeiro item das tuplas e associar com o cardápio
+        for i in vendidos_ordenado:
+            item_atual = self.cardapio[i[0]-1]
+            print(f"{item_atual['Nome']}: {i[1]} vendidos")
+            print(f"Valor total: {verde}{i[1]*float(item_atual['Preço'].replace(',','.')):.2f}{branco}")
+        
+
 e = estoque()
 c = cardapio()
 m = mesa()
 p = pagamento()
+r = relatorio()
 
 if __name__ == "__main__":
-    p.conta_total()
+    r.mais_vendidos()
     pass

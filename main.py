@@ -1,10 +1,12 @@
-from Gerenciamento import estoque,cardapio,mesa,pagamento
+from Gerenciamento import estoque,cardapio,mesa,pagamento,relatorio
 from Uteis import *
 
 e = estoque()
 c = cardapio()
 m = mesa()
 p = pagamento()
+r = relatorio()
+
 print_ornamentado('Gerenciamento de restaurantes')
 while True: #Menu
     print(opcoes_geral)
@@ -107,7 +109,24 @@ while True: #Menu
                         break
                     case _:
                         print(f'{vermelho}Opção inválida{branco}')
-        case '6': #Sair
+        case '6': #Relatório
+            print_ornamentado('Relatório')
+            while True:
+                print(opcoes_relatorio)
+                op = input('Digite a opção desejada: ')
+                match op:
+                    case '1':
+                        r.total()
+                        r.mais_vendidos()
+                    case '2':
+                        r.total()
+                    case '3':
+                        r.mais_vendidos()
+                    case '4':
+                        break
+                    case _:
+                        print(f"{vermelho}Opção inválida{branco}")
+        case '7':
             break
         case _:
             print(f"{vermelho}Opção inválida{branco}")
