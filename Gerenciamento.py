@@ -114,7 +114,7 @@ class estoque:
             if posicao == 0:
                 print(f'{vermelho}Item não encontrado!{branco}')
             if posicao > 0:
-                print(f'{vermelho}Item não encontrado! Verifiqtalvez você esteja colocando o nome minúsculo!{branco}')
+                print(f'{vermelho}Item não encontrado! Talvez você esteja colocando o nome todo em minúsculo!{branco}')
 
         writedict("estoque.csv",self.itens_estoque,self.fn)
         
@@ -144,16 +144,16 @@ class estoque:
                         
 class cardapio:
     def __init__(self):
-        self.cardapio = [] #O nosso cardápio
-        self.estoque = [] #O nosso estoque
-        with open("cardápio.csv",encoding='UTF-8') as items:
+        self.cardapio = [] # O nosso cardápio
+        self.estoque = [] # O nosso estoque
+        with open("cardapio.csv",encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.cardapio.append(i)
         with open('estoque.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.estoque.append(i)
         
-        self.fn = ('Nome','Preço','Descrição','Ingredientes') #Fieldnames do item
+        self.fn = ('Nome','Preço','Descrição','Ingredientes') # Fieldnames do item
     
     def consultar(self):
         print_ornamentado('Itens no cardápio')
@@ -170,7 +170,7 @@ class cardapio:
             c += 1
         print(branco,end="")
     
-    def cadastrar(self): #Cadastro de produto
+    def cadastrar(self): # Cadastro de produto
         print_ornamentado('Cadastrar produto')
         nome = input("Digite o nome do produto: ") 
         preço = input("Digite o preço do produto: ")
@@ -204,8 +204,8 @@ class cardapio:
                 print(self.estoque)
                 continue
             else:
-                self.cardapio.append({'Nome': nome, 'Preço': preço, 'Descrição': descrição, "Ingredientes":ingredientes})
-                writedict("cardápio.csv",self.cardapio,self.fn)
+                self.cardapio.append({'Nome': nome, 'Preço': preço, 'Descrição': descrição, "Ingredientes": ingredientes})
+                writedict("cardapio.csv",self.cardapio,self.fn)
                 break
     
     def atualizar(self):
@@ -284,19 +284,19 @@ class cardapio:
                             print(escolha)
                         self.cardapio[int(escolha-1)]['Ingredientes'] = ingredientes
                         break
-        writedict("cardápio.csv",self.cardapio,self.fn)
+        writedict("cardapio.csv",self.cardapio,self.fn)
     
     def remover(self):
         self.consultar()
         escolha = int(input("Digite o número do item que deseja remover: "))
-        escolha2 = input(f"{vermelho}Certeza que deseja remover {self.cardapio[escolha-1]['Nome']}? s/n")
+        escolha2 = input(f"{vermelho}Tem certeza que deseja remover {self.cardapio[escolha-1]['Nome']}? (s/n): ")
         if escolha2 == 's':
             self.cardapio.pop(escolha-1)
-            writedict("cardápio.csv",self.cardapio,self.fn)
-            print(f"Item removido com sucesso{branco}")
+            writedict("cardapio.csv",self.cardapio,self.fn)
+            print(f"Item removido com sucesso!{branco}")
             self.consultar()
         else:
-            print(f'{verde}Item não removido')
+            print(f'{verde}Item não removido!')
             self.consultar()
 
 class mesa:
@@ -307,11 +307,11 @@ class mesa:
                 self.mesas.append(i)
         self.fn = ('Número','Capacidade','Status','Pessoas','Pedido')
 
-        self.pedidos = [] #Nossos pedidos. Armazenados de acordo com o self.fnp
+        self.pedidos = [] # Nossos pedidos. Armazenados de acordo com o self.fnp
         with open('pedido.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.pedidos.append(i)
-        self.fnp = ('Mesa','Horário','Status','Itens') #Fieldnames do pedido
+        self.fnp = ('Mesa','Horário','Status','Itens') # Fieldnames do pedido
         
         self.estoque = []
         with open('estoque.csv',encoding='UTF-8') as items:
@@ -319,10 +319,10 @@ class mesa:
                 self.estoque.append(i)
         self.fn_estoque = ('Código','Nome','Quantidade','Unidade','Preço','Validade','Quantidade mínima')
         self.cardapio = []
-        with open('cardápio.csv',encoding='UTF-8') as items:
+        with open('cardapio.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.cardapio.append(i)
-        # Status -> 0 = Registrado | 1 = fazendo | 2 = Feito
+        # Status -> 0 = Registrado | 1 = Fazendo | 2 = Feito
         
     def exibir(self,colunas=5,editar=False):
         self.__init__()
@@ -343,7 +343,7 @@ class mesa:
         print_ornamentado('Cadastrar mesa')
         numero = input("Digite o número da mesa: ")
         capacidade = input("Digite a capacidade da mesa: ")
-        item = {"Número":numero,"Capacidade":capacidade,"Status":0,"Pessoas":0}
+        item = {"Número": numero,"Capacidade": capacidade,"Status": 0,"Pessoas": 0}
         self.mesas.append(item)
         writedict("mesa.csv",self.mesas,self.fn)
         print(f'{verde}Mesa cadastrada com sucesso!{branco}')
@@ -361,8 +361,8 @@ class mesa:
 
     def ocupar(self,mesa='False'):
         self.exibir(editar=True)
-        print_ornamentado('Adicionar clientes a mesa')
-        while True: #Loop para definir o número da mesa e quantidade de pessoas
+        print_ornamentado('Adicionar clientes à mesa')
+        while True: # Loop para definir o número da mesa e quantidade de pessoas
             if mesa == 'False':    
                 mesa = int(input("Digite o número da mesa que deseja ocupar: "))
             if self.mesas[mesa-1]['Status'] == '2':
@@ -370,7 +370,7 @@ class mesa:
                 continue
             if self.mesas[mesa-1]['Status'] == '1':
                 print(f'{vermelho}A mesa {mesa} está reservada,{branco}',end=" ")
-                escolha = input('Deseja alocar o cliente mesmo assim? s/n ')
+                escolha = input('Deseja alocar o cliente mesmo assim? (s/n): ')
                 if escolha != 's':
                     continue
             pessoas = int(input(f"Digite o número de pessoas que deseja colocar na mesa {mesa}: "))
@@ -378,7 +378,7 @@ class mesa:
                     print(f'{vermelho}A quantidade de pessoas é maior do que a capacidade da mesa. Talvez você consiga cadastrar em duas mesas!{branco}')
             else:
                 break
-        escolha = input('Você deseja fazer uma reserva ou ocupar a mesa? r/o: ')
+        escolha = input('Você deseja fazer uma reserva ou ocupar a mesa? (r/o): ')
         if escolha == 'r':
             self.mesas[mesa-1]['Status'] = 1
         else:
@@ -396,30 +396,32 @@ class mesa:
         else:
             escolha = mesa
 
-        if self.mesas[escolha-1]['Status'] == '0': #Se a mesa está sem clientes
-            op = input(f'A mesa {azul}{escolha}{branco} não tem clientes cadastrados, deseja adicionar um cliente? s/n: ')
+        if self.mesas[escolha-1]['Status'] == '0': # Quando a mesa está sem clientes
+            op = input(f'A mesa {azul}{escolha}{branco} não tem clientes cadastrados, deseja adicionar um cliente? (s/n): ')
             if op == 's':
                 self.ocupar(escolha)
             else:
                 c.consultar()
                 pass
-        if self.pedidos == []: #Verifica se é o primeiro pedido
+        if self.pedidos == []: # Verifica se é o primeiro pedido
             print('Primeiro pedido do dia!')
-            self.pedidos.append({'Mesa':escolha-1,'Horário':datetime.datetime.now(),'Status':'Registrado','Itens':[]})
+            self.pedidos.append({'Mesa': escolha-1,'Horário': datetime.datetime.now(),'Status': 'Registrado','Itens': []})
         else:
-            self.pedidos.append({'Mesa':escolha-1,'Horário':datetime.datetime.now(),'Status':'Registrado','Itens':[]})
+            self.pedidos.append({'Mesa': escolha-1,'Horário': datetime.datetime.now(),'Status': 'Registrado','Itens': []})
         c.consultar()
         pedidos = []
         pedido = 1
         
-        while True: #Loop de adicionar pedido
-            pedido = input('Digite o pedido da mesa, um item por vez, digite 0 para parar:')
+        while True: # Loop de adicionar pedido
+            pedido = input('Digite o pedido da mesa, sendo um item por vez. Ao final, digite 0 para parar: ')
             if pedido == '0':
                 break
+            
             # Verificar se o item está presente no estoque
             ingredientes = eval(self.cardapio[int(pedido)-1]['Ingredientes'])  # Obtém os ingredientes do item do cardápio
             itens_remover = []  # Lista para armazenar os itens que serão removidos do estoque
             suficiente = True  # Variável para verificar se todos os ingredientes estão disponíveis
+            
             for ingrediente in ingredientes:
                 # Verifica se o ingrediente está presente no cardápio
                 if ingrediente[0].upper() in self.cardapio[int(pedido)-1]['Ingredientes'].upper():
@@ -434,6 +436,7 @@ class mesa:
                                 i['Quantidade'] = str(round(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.'))))
                                 itens_remover.append(i)  # Adiciona o item atualizado à lista de itens a serem removidos
             # Atualiza o estoque com os itens removidos
+            
             if suficiente == True: # Se temos todos os ingredientes
                 for i in itens_remover: # Loop para remover os itens
                     for j in self.estoque:
@@ -444,9 +447,10 @@ class mesa:
                 print(f'{azul}Pedido da mesa {escolha}:{branco}', end=' ')
                 for i in range(len(pedidos)):
                     # Exibe os nomes dos itens do pedido
-                    print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}", end=', ')  # Adicionar handling de erro
+                    print(f"{c.cardapio[int(pedidos[i-1])]['Nome']}", end=', ')
                 else:
                     print()
+                    
                 # Atualiza o pedido da mesa e o registro de pedidos
                 self.mesas[escolha-1]['Pedido'] = pedidos
                 self.pedidos[-1]['Itens'] = pedidos
@@ -456,15 +460,16 @@ class mesa:
     def mostrar_pedido(self,mesa=-1):
         if mesa == -1:
             self.exibir()
-            mesa = int(input('De qual mesa deseja ver o pedido? '))
+            mesa = int(input('De qual mesa você deseja ver o pedido? '))
         print(f'{azul}Pedido da mesa {mesa}:{branco}',end=' ')
+        
         for i in eval(self.mesas[mesa-1]['Pedido']):
             print(c.cardapio[i]['Nome'],end=', ')
         else:
             print()
 
     def fila_de_pedidos(self):
-        print_ornamentado('Fila de pedidos:')
+        print_ornamentado('Fila de pedidos: ')
         for i in self.pedidos:
             print(azul,end='')
             print('-'*20)
@@ -477,7 +482,7 @@ class mesa:
             else:
                 print()
             print(f"{rosa}Status do pedido: {branco} {i['Status']}")
-            print(f"{rosa}Dia e horário do pedido: {branco}{i['Horário'][:-7]}")
+            print(f"{rosa}Dia e hora do pedido: {branco}{i['Horário'][:-7]}")
         else:
             print(azul,end='')
             print('-'*20)
@@ -494,10 +499,10 @@ class mesa:
 Qual status deseja colocar? """))
                 break
             except ValueError:
-                print(f'{vermelho}Opção inválida{branco}')
+                print(f'{vermelho}Opção inválida!{branco}')
         match status:
             case 1:
-                status = 'Recebido'
+                status = 'Registrado'
             case 2:
                 status = 'Em preparo'
             case 3:
@@ -506,13 +511,14 @@ Qual status deseja colocar? """))
                 status = 'Entregue'
         self.pedidos[mesa-1]['Status'] = status
     
-    def apagar_pedido(self,mesa=float('inf'),index=False): #Apaga o pedido da mesa pelo número da mesa (Do restaurante, não da lista)
+    def apagar_pedido(self,mesa=float('inf'),index=False): # Apaga o pedido da mesa pelo número da mesa (Do restaurante, não da lista)
         if index:
-            pedido_apagar = int(input('Qual o número do pedido que você deseja apagar?'))
+            pedido_apagar = int(input('Qual o número do pedido que você deseja apagar? '))
             self.pedidos.pop(pedido_apagar-1)
         if mesa == float('inf') and index == False:
             print(mesa)
-            mesa = int(input('Digite a mesa que deseja apagar o pedido.'))-1
+            mesa = int(input('Digite o número da mesa que deseja apagar o pedido: '))-1
+        
         for pedido in self.pedidos:
             if int(pedido['Mesa']) == int(mesa)-1:
                 self.pedidos.pop(self.pedidos.index(pedido))
@@ -522,7 +528,7 @@ Qual status deseja colocar? """))
 class pagamento:
     def __init__(self):
         self.mesas = []
-        self.cardápio = []
+        self.cardapio = []
         self.estoque = []
         self.pedidos = []
         self.pagamentos = []
@@ -533,9 +539,9 @@ class pagamento:
         with open('mesa.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.mesas.append(i)
-        with open("cardápio.csv",encoding='UTF-8') as items:
+        with open("cardapio.csv",encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
-                self.cardápio.append(i)
+                self.cardapio.append(i)
         with open('estoque.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.estoque.append(i)
@@ -552,8 +558,9 @@ class pagamento:
             mesa = int(input("Digite a mesa que você deseja pedir a conta: "))
             #mesa = 1
         total = 0
+        
         if self.mesas[mesa-1]['Pedido'] == '[]':
-            i = input(f"{vermelho}A mesa não tem conta em aberto.{branco} Deseja cadastrar? s/n")
+            i = input(f"{vermelho}A mesa não tem conta em aberto.{branco} Deseja cadastrar? (s/n): ")
             if i == 's':
                 m.pedido(mesa)
                 p.conta_total(mesa,False)
@@ -561,16 +568,16 @@ class pagamento:
             for i in eval(self.mesas[mesa-1]['Pedido']):
                 fill = '.'
                 align = ">"
-                dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
-                print(f"{self.cardápio[int(i)-1]['Nome']:.<30}R$ {self.cardápio[int(i)-1]['Preço']:>}")
-                total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
-            print(f"{'Total:':.<30}{verde}R$ {total:>}{branco}") #how to format to :.2f?
-            acrescimo = input(r'Deseja adicionar os 10% de serviço? s/n: ')
+                dis = int(len({self.cardapio[int(i)-1]['Nome']}) - 30)
+                print(f"{self.cardapio[int(i)-1]['Nome']:.<30}R$ {self.cardapio[int(i)-1]['Preço']:>}")
+                total += float(self.cardapio[int(i)-1]['Preço'].replace(',','.'))
+            print(f"{'Total:':.<30}{verde}R$ {total:>.2f}{branco}") 
+            acrescimo = input(r'Deseja adicionar os 10% de serviço? (s/n): ')
             if acrescimo == 's':
                 total = round(total*1.1,2)
-            print(f"{'Total (Com acréscimo):':.<30}{verde}R$ {total:>}{branco}") #how to format to :.2f?
+            print(f"{'Total (Com acréscimo):':.<30}{verde}R$ {total:>.2f}{branco}") 
         if not self.pago:
-            pagar = input('Deseja pagar a conta? s/n: ')
+            pagar = input('Deseja pagar a conta? (s/n): ')
             if pagar == 's':
                 self.pagamento(mesa)
 
@@ -580,7 +587,7 @@ class pagamento:
         if mesa == -1:
             mesa = int(input("Digite a mesa que você deseja pagar a conta: "))
         if self.mesas[mesa-1]['Pedido'] == '[]':
-            i = input(f"{vermelho}A mesa não tem conta em aberto.{branco} Deseja cadastrar? s/n")
+            i = input(f"{vermelho}A mesa não tem conta em aberto.{branco} Deseja cadastrar? (s/n): ")
             if i == 's':
                 m.pedido(mesa)
             else:
@@ -589,28 +596,28 @@ class pagamento:
         for i in eval(self.mesas[mesa-1]['Pedido']):
             fill = '.'
             align = ">"
-            dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
-            total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
-        op = input(f"Você deseja dividir a conta no valor de R${verde}{total:.2f}{branco} entre as {self.mesas[mesa-1]['Pessoas']} pessoas da mesa {mesa}? s/n: ").lower()
+            dis = int(len({self.cardapio[int(i)-1]['Nome']}) - 30)
+            total += float(self.cardapio[int(i)-1]['Preço'].replace(',','.'))
+        op = input(f"Você deseja dividir a conta no valor de R${verde}{total:.2f}{branco} entre as {self.mesas[mesa-1]['Pessoas']} pessoas da mesa {mesa}? (s/n): ").lower()
         pessoa = self.mesas[mesa-1]['Pessoas']
         valor_de_cada = (total/int(pessoa))
         if op == 's':
             print(f'Temos {azul}{pessoa}{branco} pessoas na mesa. O valor por pessoa fica R${verde}{valor_de_cada:.2f}{branco}')
-            op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? c/d: ')
+            op2 = input('O pagamento vai ser em dinheiro ou pix/cartão? (d/c): ')
             if op2 == 'd':
                 self.troco(valor_de_cada,mesa,True)
                 meio = 'Dinheiro/pix'
             if op2 == 'c':
                 for i in range(int(self.mesas[mesa-1]['Pessoas'])):
-                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada:.2f}{branco} da pessoa {azul}{i+1}{branco}. Pressione enter quando o pagamento for feito')
+                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada:.2f}{branco} da pessoa {azul}{i+1}{branco}. Pressione enter quando o pagamento for feito. ')
                 meio = 'Cartão'
         else:
-            op2 = input('O pagamento vai ser em dinheiro/pix ou cartão? c/d:')
+            op2 = input('O pagamento vai ser em dinheiro ou pix/cartão? (d/c): ')
             if op2 == 'd': # Opção pagamento em dinheiro/pix
                 self.troco(total,mesa,False)
                 meio = 'Dinheiro/pix'
             if op2 == 'c': # Opção pagamento em cartão
-                input(f'Aproxime a maquininha e cobre R${verde}{total:.2f}{branco} do cliente. Pressione enter quando o pagamento for feito')
+                input(f'Aproxime a maquininha e cobre R${verde}{total:.2f}{branco} do cliente. Pressione enter quando o pagamento for feito. ')
                 meio = 'Cartão'
         for pedido in self.pedidos:
             if int(pedido['Mesa']) == int(mesa)-1:
@@ -622,7 +629,7 @@ class pagamento:
         self.mesas[mesa-1]['Pedido'] = []
         self.pedidos = m.apagar_pedido(mesa)
         self.pago = True
-        print(f'{verde}Pedido pago com sucesso.{branco}')
+        print(f'{verde}Pedido pago com sucesso!{branco}')
         m.livrar(mesa-1,False)
         writedict('mesa.csv',self.mesas,self.fn)
         writedict('pedido.csv',self.pedidos,self.fnp)
@@ -657,7 +664,7 @@ class relatorio:
             for i in csv.DictReader(items,delimiter=';'):
                 self.pagamentos.append(i)
         self.cardapio = []
-        with open('cardápio.csv',encoding='UTF-8') as items:
+        with open('cardapio.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.cardapio.append(i)
         self.mesas = []
@@ -675,26 +682,26 @@ class relatorio:
             print_ornamentado('Relatório de vendas')
             print(f"Foram feitas {self.Vendas} vendas hoje. O valor total arrecadado foi de R${verde}{self.Valor_total:.2f}{branco}")
         media_mesa = round(self.Valor_total/len(self.mesas),2)
-        print(f"A média de valor dentre as {azul}{len(self.mesas)}{branco} mesas é de R${verde}{self.Valor_total/len(self.mesas):.2f}{branco}")
+        print(f"A média de valor dentre as {azul}{len(self.mesas)}{branco} mesas foi de R${verde}{self.Valor_total/len(self.mesas):.2f}{branco}")
         return self.Vendas,self.Valor_total
         
     def mais_vendidos(self):
         print_ornamentado('Mais vendidos')
         vendidos = []
 
-        #Ler todos os itens dos pedidos e colocar todos em uma lista. 
+        # Ler todos os itens dos pedidos e colocar todos em uma lista
         for pedidos in self.pagamentos:
             for i in eval(pedidos['Itens']):
                 vendidos.append(i) 
 
-        #Contar os valores individuais da lista para gerar uma lista com tuplas de pares Valor
-        itens = set(vendidos) #Tranformar em conjunto para pegar os itens individuais
+        # Contar os valores individuais da lista para gerar uma lista com tuplas de pares Valor
+        itens = set(vendidos) # Tranformar em conjunto para pegar os itens individuais
         vendidos_ordenado = []
         for i in itens: 
-            vendidos_ordenado.append((i,vendidos.count(i))) #Coloca em vendidos uma tupla para cada item com ele e sua quantidade
+            vendidos_ordenado.append((i,vendidos.count(i))) # Coloca em vendidos uma tupla para cada item com ele e sua quantidade
         vendidos_ordenado.sort(key=lambda x: x[1],reverse=True)
 
-        #Verificar cada primeiro item das tuplas e associar com o cardápio
+        # Verificar cada primeiro item das tuplas e associar com o cardápio
         for i in vendidos_ordenado:
             item_atual = self.cardapio[i[0]-1]
             print(f"{item_atual['Nome']}: {i[1]} vendidos")

@@ -20,8 +20,10 @@ def validade_cor(validade):
     ano,dia,mes = int(validade[6:]),int(validade[0:2]),int(validade[3:5])
     # print(date(ano,mes,dia))
     # print(date.today())
+
     diferenca = (date(ano,mes,dia) - date.today()).days
-    # print(diferença)
+    # print(diferenca)
+    
     if diferenca >= 3:
         return f"{azul}Validade:{branco} {verde}{validade}{branco}"
     elif diferenca >= 0:
