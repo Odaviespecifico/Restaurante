@@ -60,7 +60,7 @@ class estoque:
         item = {"Código":cod,"Nome":nome,"Quantidade":quantidade,"Unidade":unidade,"Preço":preco,"Validade":validade,'Quantidade mínima':q_minima}
         self.itens_estoque.append(item)
         mostrar_item(item)
-        print(verde,'produto cadastrado com sucesso',branco)
+        print(verde,'Produto cadastrado com sucesso!',branco)
         writedict("estoque.csv",self.itens_estoque,self.fn)
 
     def editar(self):
@@ -106,7 +106,7 @@ class estoque:
                             editou(self.itens_estoque[posicao])
                             break
                         case _:
-                            print(f'{vermelho}Opção inválida{branco}')
+                            print(f'{vermelho}Opção inválida!{branco}')
                             break
                 break
             posicao += 1
@@ -114,7 +114,7 @@ class estoque:
             if posicao == 0:
                 print(f'{vermelho}Item não encontrado!{branco}')
             if posicao > 0:
-                print(f'{vermelho}Item não encontrado, talvez você esteja colocando o nome minúsculo!{branco}')
+                print(f'{vermelho}Item não encontrado! Verifiqtalvez você esteja colocando o nome minúsculo!{branco}')
 
         writedict("estoque.csv",self.itens_estoque,self.fn)
         
@@ -434,8 +434,8 @@ class mesa:
                                 i['Quantidade'] = str(round(float(i['Quantidade']) - float(ingrediente[1].replace(',', '.'))))
                                 itens_remover.append(i)  # Adiciona o item atualizado à lista de itens a serem removidos
             # Atualiza o estoque com os itens removidos
-            if suficiente == True: #se temos todos os ingredientes
-                for i in itens_remover: #Loop para remover os itens
+            if suficiente == True: # Se temos todos os ingredientes
+                for i in itens_remover: # Loop para remover os itens
                     for j in self.estoque:
                         if i['Nome'] == j['Nome']:
                             self.estoque[self.estoque.index(j)] = i
@@ -489,7 +489,7 @@ class mesa:
                 status = int(input("""Status: 
 1 - Registrado
 2 - Em preparo
-3 - Concluido
+3 - Concluído
 4 - Entregue
 Qual status deseja colocar? """))
                 break
@@ -501,7 +501,7 @@ Qual status deseja colocar? """))
             case 2:
                 status = 'Em preparo'
             case 3:
-                status = 'Concluido'
+                status = 'Concluído'
             case 4:
                 status = 'Entregue'
         self.pedidos[mesa-1]['Status'] = status
@@ -512,11 +512,12 @@ Qual status deseja colocar? """))
             self.pedidos.pop(pedido_apagar-1)
         if mesa == float('inf') and index == False:
             print(mesa)
-            mesa = int(input('Digite a mesa que deseja apagar o pedido.'))
+            mesa = int(input('Digite a mesa que deseja apagar o pedido.'))-1
         for pedido in self.pedidos:
             if int(pedido['Mesa']) == int(mesa)-1:
                 self.pedidos.pop(self.pedidos.index(pedido))
-        writedict('pedido.csv',self.pedidos,self.fnp)
+                writedict('pedido.csv',self.pedidos,self.fnp)
+        return self.pedidos
 
 class pagamento:
     def __init__(self):
@@ -524,8 +525,11 @@ class pagamento:
         self.cardápio = []
         self.estoque = []
         self.pedidos = []
+        self.pagamentos = []
+        self.pago = False
         self.fn = ["Número","Capacidade","Status","Pessoas","Pedido"]
         self.fnp = ('Mesa','Horário','Status','Itens')
+        self.fn_pagamentos = ('Mesa','Horário','Itens','Valor')
         with open('mesa.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.mesas.append(i)
@@ -538,41 +542,45 @@ class pagamento:
         with open('pedido.csv',encoding='UTF-8') as items:
             for i in csv.DictReader(items,delimiter=';'):
                 self.pedidos.append(i)
-                
-    def conta_total(self,mesa=-1):
+        with open('pagamentos.csv',encoding='UTF-8') as items:
+            for i in csv.DictReader(items,delimiter=';'):
+                self.pagamentos.append(i)
+    def conta_total(self,mesa=-1,firstpass=True):
         self.__init__()
         m.exibir()
         if mesa == -1:
-            mesa = int(input("Digite a mesa que você deseja a conta: "))
+            mesa = int(input("Digite a mesa que você deseja pedir a conta: "))
             #mesa = 1
         total = 0
         if self.mesas[mesa-1]['Pedido'] == '[]':
-            i = input(f"{vermelho}A mesa não tem conta.{branco} Deseja cadastrar? s/n")
+            i = input(f"{vermelho}A mesa não tem conta em aberto.{branco} Deseja cadastrar? s/n")
             if i == 's':
                 m.pedido(mesa)
-                p.conta_total(mesa)
+                p.conta_total(mesa,False)
         else:
             for i in eval(self.mesas[mesa-1]['Pedido']):
                 fill = '.'
-                aling = ">"
+                align = ">"
                 dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
                 print(f"{self.cardápio[int(i)-1]['Nome']:.<30}R$ {self.cardápio[int(i)-1]['Preço']:>}")
                 total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
-            print(f"{'Total:':.<30}{verde}R$ {total:>}{branco}")
+            print(f"{'Total:':.<30}{verde}R$ {total:>}{branco}") #how to format to :.2f?
             acrescimo = input(r'Deseja adicionar os 10% de serviço? s/n')
             if acrescimo == 's':
                 total = round(total*1.1,2)
-            print(f"{'Total (Com acréscimo):':.<30}{verde}R$ {total:>}{branco}")
-        pagar = input('Deseja pagar a conta? s/n: ')
-        if pagar == 's':
-            self.pagamento(mesa)
+            print(f"{'Total (Com acréscimo):':.<30}{verde}R$ {total:>}{branco}") #how to format to :.2f?
+        if not self.pago:
+            pagar = input('Deseja pagar a conta? s/n: ')
+            if pagar == 's':
+                self.pagamento(mesa)
+
 
     def pagamento(self,mesa=-1):
         m.exibir()
         if mesa == -1:
             mesa = int(input("Digite a mesa que você deseja pagar a conta: "))
         if self.mesas[mesa-1]['Pedido'] == '[]':
-            i = input(f"{vermelho}A mesa não tem conta.{branco} Deseja cadastrar? s/n")
+            i = input(f"{vermelho}A mesa não tem conta em aberto.{branco} Deseja cadastrar? s/n")
             if i == 's':
                 m.pedido(mesa)
             else:
@@ -580,10 +588,10 @@ class pagamento:
         total = 0
         for i in eval(self.mesas[mesa-1]['Pedido']):
             fill = '.'
-            aling = ">"
+            align = ">"
             dis = int(len({self.cardápio[int(i)-1]['Nome']}) - 30)
             total += float(self.cardápio[int(i)-1]['Preço'].replace(',','.'))
-        op = input(f"Você deseja dividir a conta no valor de R${verde}{total}{branco} entre as {self.mesas[mesa-1]['Pessoas']} pessoas da mesa {mesa}? s/n: ").lower()
+        op = input(f"Você deseja dividir a conta no valor de R${verde}{total:.2f}{branco} entre as {self.mesas[mesa-1]['Pessoas']} pessoas da mesa {mesa}? s/n: ").lower()
         pessoa = self.mesas[mesa-1]['Pessoas']
         valor_de_cada = (total/int(pessoa))
         if op == 's':
@@ -592,19 +600,24 @@ class pagamento:
             if op2 == 'd':
                 self.troco(valor_de_cada,mesa,True)
             if op2 == 'p':
-                for i in range(self.mesas[mesa-1]['Pessoas']):
-                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada:.2f}{branco} da pessoa {azul}{i+1}{branco}. Precione enter quando o pagamento for feito')
+                for i in range(int(self.mesas[mesa-1]['Pessoas'])):
+                    input(f'Aproxime a maquininha e cobre R${verde}{valor_de_cada:.2f}{branco} da pessoa {azul}{i+1}{branco}. Pressione enter quando o pagamento for feito')
         else:
             op2 = input('O pagamento vai ser em pix/cartão ou dinheiro? p/d:')
-            if op2 == 'd':
+            if op2 == 'd': # Opção pagamento em dinheiro
                 self.troco(total,mesa,False)
-            if op2 == 'p':
-                input(f'Aproxime a maquininha e cobre R${verde}{total}{branco} do cliente. Precione enter quando o pagamento for feito')
-                    
+            if op2 == 'p': # Opção pagamento em pix/cartão
+                input(f'Aproxime a maquininha e cobre R${verde}{total:.2f}{branco} do cliente. Pressione enter quando o pagamento for feito')
+        for pedido in self.pedidos:
+            if int(pedido['Mesa']) == int(mesa)-1:
+                self.pagamentos.append({'Mesa':pedido['Mesa'],'Horário':pedido['Horário'],'Itens':pedido['Itens'],'Valor':total})
+                self.pagamentos[-1]['Valor'] = total
+        writedict('pagamentos.csv',self.pagamentos,self.fn_pagamentos)
         self.mesas[mesa-1]['Status'] = 0
         self.mesas[mesa-1]['Pessoas'] = 0
         self.mesas[mesa-1]['Pedido'] = []
-        m.apagar_pedido(mesa)
+        self.pedidos = m.apagar_pedido(mesa)
+        self.pago = True
         print(f'{verde}Pedido pago com sucesso.{branco}')
         m.livrar(mesa-1,False)
         writedict('mesa.csv',self.mesas,self.fn)
@@ -613,25 +626,25 @@ class pagamento:
     def troco(self,valor,mesa,plural=False):
         if plural == True:
             for i in range(int(self.mesas[mesa-1]['Pessoas'])):
-                print(f'Cobre {verde}R${valor}{branco} da pessoa {i+1}.')
+                print(f'Cobre {verde}R${valor:.2f}{branco} da pessoa {i+1}.')
                 pago = float(input('Quanto foi pago? R$'))
                 if pago > valor:
-                    print(f'Você deve devolver {verde}R${pago-valor:.2f}{branco} de troco.')
+                    print(f'Você deve devolver {verde}R${(pago-valor):.2f}{branco} de troco.')
                 if pago == valor:
                     print('Você não precisa dar troco.')
                 if pago < valor:
                     print(f'{vermelho}O cliente não pagou o suficiente{branco}')
-                    print(f'Ele ainda deve pagar {vermelho}R$ {valor - pago}{branco}')
+                    print(f'Ele ainda deve pagar {vermelho}R$ {(valor - pago):.2f}{branco}')
         if plural == False:
-            print(f'Cobre {verde}R${valor}{branco} do cliente.')
+            print(f'Cobre {verde}R${valor:.2f}{branco} do cliente.')
             pago = float(input('Quanto foi pago? R$'))
             if pago > valor:
-                print(f'Você deve devolver {verde}R${valor-pago}{branco} de troco.')
+                print(f'Você deve devolver {verde}R${(valor - pago):.2f}{branco} de troco.')
             if pago == valor:
                 print('Você não precisa dar troco.')
             if pago < valor:
                 print(f'{vermelho}O cliente não pagou o suficiente{branco}')
-                print(f'Ele ainda deve pagar {vermelho}R$ {valor - pago}{branco}')
+                print(f'Ele ainda deve pagar {vermelho}R$ {(valor - pago):.2f}{branco}')
 
 e = estoque()
 c = cardapio()
@@ -639,5 +652,5 @@ m = mesa()
 p = pagamento()
 
 if __name__ == "__main__":
-    m.pedido()
+    p.conta_total()
     pass

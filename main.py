@@ -10,7 +10,7 @@ while True: #Menu
     print(opcoes_geral)
     op = input("Digite a opção desejada: ")
     match op:
-        case '1': #Estroque
+        case '1': #Estoque
             print_ornamentado('Estoque')
             while True:
                 print(opcoes_estoque)
