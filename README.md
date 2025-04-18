@@ -5,12 +5,12 @@ Desenvolvido por Camila Rebeca, Davi Wanderley e Leonardo Rafael.
 ---
 ## Informações básicas do sistema
 1. O programa deve ser iniciado pelo arquivo main.py
-<br>
+>
 2. O projeto é divido em diferentes scripts de python, para fins de organização
     - main.py -> Menu principal para seleção das opções desejadas. Loop principal do programa.
     - gerenciamento.py -> Script com as principais classes e funções do programa, contendo toda a lógica e gestão de arquivos.
     - uteis.py -> Script com várias funções utilizadas ao longo de todo o programa. Apresenta também a definição de variáveis de texto para organizar melhor o código em main.py
-    <br>
+>
 3. O projeto armazena os dados em arquivos CSV. São esses:
     - cardapio.csv -> Informações sobre os pratos disponíveis no restaurante
     - estoque.csv -> Informações sobre os ingredientes disponíveis no restaurante
