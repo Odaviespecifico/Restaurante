@@ -10,7 +10,7 @@ class estoque:
             self.itens_estoque = [] # Lista para armazenar o conteúdo do estoque
             for row in csv.DictReader(estoque,delimiter=';'):
                 self.itens_estoque.append(row)
-        self.fn = ('Código','Nome','Quantidade','Unidade','Preço','Validade')
+        self.fn = ('Código','Nome','Quantidade','Unidade','Preço','Validade','Quantidade mínima')
     def consultar(self):
         global editar
         if editar != True:
@@ -37,8 +37,9 @@ class estoque:
             if vencidos == False:
                 print('Nenhum item crítico de validade. A fiscalização te ama ❤️')
             print('-'*20)
-        
-
+    
+    def estoque_baixo(self):
+        pass
 
     def cadastrar(self):
         print_ornamentado('Cadastrar produto')
